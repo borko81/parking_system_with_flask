@@ -13,6 +13,7 @@ class ParkingRes(Resource):
 
 class ParkingTetailInfoRes(Resource):
     """Only from admin"""
+
     def get(self, _id):
         pass
 

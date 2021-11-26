@@ -1,5 +1,6 @@
-from db import db
 from datetime import datetime
+
+from db import db
 
 
 class ParkModel(db.Model):

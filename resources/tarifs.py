@@ -1,28 +1,86 @@
+from flask import request
 from flask_restful import Resource
+
+from helpers.decorator import validate_schema
+from managers.tarif import TarifAllManager
+from managers.tarif_price_manager import (
+    TarifPricesManager,
+    TarifPriceFromConcretTypeManager,
+    PriceForConcretTypeManager,
+)
+from schemas.request.tarif_price import TarifPriceRequestSchema
+from schemas.request.tarifl import TartifRequestSchema
 
 
 class TarifAllRes(Resource):
     def get(self):
-        pass
+        """
+        :usage: curl 127.0.0.1:5000/tarif
+        :return: List with all tarif
+        """
+        data = TarifAllManager.get_all_tarif()
+        return {"all_tarife": data}, 200
 
+    @validate_schema(TartifRequestSchema)
     def post(self):
-        pass
+        """
+        Usage: curl 127.0.0.1:5000/tarif -X POST -H 'Content-Type: application/json' -d '{"name":"vip"}'
+        :return: New tarif or BadRequest if data is invalid
+        """
+        data = request.get_json()
+        return TarifAllManager.input_new_tarif(data)
 
 
 class TarifPricesRes(Resource):
     def get(self):
-        pass
+        """
+        usage: curl 127.0.0.1:5000/tarif/price
+        :return: json data with all prices for stay
+        """
+        return TarifPricesManager.get_all_tarife_prices()
 
+    @validate_schema(TarifPriceRequestSchema)
     def post(self):
-        pass
+        """
+        usage:  curl 127.0.0.1:5000/tarif/price -X POST -H "Content-Type:application/json" -d '{"tarif_id": 2, "stay":"00:01", "price":1}'
+        :return: json with new data
+        """
+        data = request.get_json()
+        return TarifPricesManager.input_new_price(data)
 
 
 class TarifConcretRes(Resource):
-    def get(self, _id):
-        pass
+    def get(self, _id: int):
+        """
+        usage: curl 127.0.0.1:5000/tarif/price/2
+        :param _id: int
+        :return: json data with result
+        """
+        schema = TarifPriceRequestSchema()
+        return (
+            schema.dump(TarifPriceFromConcretTypeManager.get_result(_id).first()),
+            200,
+        )
 
-    def put(self, _id):
-        pass
+    def put(self, _id: int):
+        """
+        usage:  curl 127.0.0.1:5000/tarif/price/2 -X PUT -H "Content-Type:application/json" -d '{"price": 20}'
+        :param _id: int
+        :return: update data
+        """
+        data = request.get_json()
+        schema = TarifPriceRequestSchema()
+        return (
+            schema.dump(
+                TarifPriceFromConcretTypeManager.edit_result(_id, data).first()
+            ),
+            200,
+        )
 
-    def delete(self, _id):
-        pass
+    def delete(self, _id: int):
+        return TarifPriceFromConcretTypeManager.delete_result(_id)
+
+
+class ReturnPricesFromConcretTypeRes(Resource):
+    def get(self, type: str):
+        return PriceForConcretTypeManager.get_price_from_type(type)

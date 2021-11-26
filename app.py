@@ -3,15 +3,15 @@ from flask_migrate import Migrate
 from flask_restful import Api
 
 from db import db
-from resources.routers import routes
+from resources.routers import routers
 
 app = Flask(__name__)
-app.config.from_object('config.DevelopmentConfig')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object("config.DevelopmentConfig")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 api = Api(app)
 migrate = Migrate(app, db, compare_type=True)
-
+db.init_app(app)
 
 @app.before_first_request
 def create_tables():
@@ -25,7 +25,12 @@ def close_request(response):
     return response
 
 
-[api.add_resource(*route) for route in routes]
+@app.route("/test_is_alive")
+def test_is_alive():
+    return {"message": "Server still alive"}
 
-if __name__ == '__main__':
+
+[api.add_resource(*route) for route in routers]
+
+if __name__ == "__main__":
     app.run()
