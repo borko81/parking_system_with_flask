@@ -13,7 +13,7 @@ class ParkingCapacityRes(Resource):
         :return: parking capacity
         """
         capacity = ParkCapacityManager.get_capacity()
-        return capacity.capacity
+        return capacity
 
     def post(self):
         """

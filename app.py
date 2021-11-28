@@ -1,6 +1,9 @@
 from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
+from werkzeug.exceptions import BadRequest
+from sqlalchemy import exc
+from psycopg2.errorcodes import UNIQUE_VIOLATION
 
 from db import db
 from resources.routers import routers
@@ -23,6 +26,12 @@ def create_tables():
 def close_request(response):
     db.session.commit()
     return response
+
+@app.errorhandler(exc.SQLAlchemyError)
+def handle_db_exceptions(error):
+    #log the error: app.logger.error(error)
+    db.session.rollback()
+    raise BadRequest("Error acquire when try to commit data")
 
 
 @app.route("/test_is_alive")

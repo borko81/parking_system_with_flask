@@ -20,6 +20,7 @@ class TariffTypeModel(db.Model):
         unique=True,
     )
     created_on = db.Column(db.DateTime, server_default=func.now())
+    subscription = db.relationship('SubscriptionModel', backref='subscription', lazy='dynamic')
 
     @classmethod
     def find_by_name(cls, input_name):

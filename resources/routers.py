@@ -2,9 +2,9 @@ from resources.user_resource import UserRegisterRes, UserLoginRes, UserControlRe
 
 from resources.tarifs import TarifAllRes, TarifPricesRes, TarifConcretRes, ReturnPricesFromConcretTypeRes
 
-from resources.subsription import SubscriptionRes, SubsciprConcretRes, SubscriptionFromType
+from resources.subsription import SubscriptionRes, SubscribeFromIdRes, SubscriptionFromType
 
-from resources.parking import ParkingRes, ParkingPayRes, ParkingAlreadyPay, ParkingTetailInfoRes
+from resources.parking import ParkingRes, ParkingPayRes, ParkingAlreadyPay, ParkingDetailInfoRes
 
 from resources.parking_capacity_resource import ParkingCapacityRes
 
@@ -17,11 +17,11 @@ routers = (
     (TarifConcretRes, "/tarif/price/<int:_id>"),
     (ReturnPricesFromConcretTypeRes, '/tarif/type/<string:type>'),
     (SubscriptionRes, "/subscription"),
-    (SubsciprConcretRes, "/subscription/<int:_id>"),
+    (SubscribeFromIdRes, "/subscription/<int:_id>"),
     (SubscriptionFromType, "/subscription/type/<int:_id>"),
     (ParkingRes, "/parking"),
     (ParkingPayRes, "/parking/pay/<int:id>"),
     (ParkingAlreadyPay, "/parking/already_pay"),
-    (ParkingTetailInfoRes, "/parking/detail/<int:_id>"),
+    (ParkingDetailInfoRes, "/parking/detail/<int:_id>"),
     (ParkingCapacityRes, "/parking/capacity")
 )
