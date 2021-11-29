@@ -1,7 +1,6 @@
 # parking_system_with_flask
-Parking system, we have a maximum number of free spaces for which cars stay in the parking lot.
-Usage tariff plans with prices for hours of stay are used.
-The cards have an expiration date, according to which it is active
+
+Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The authorized users have access to the basic data about the parking lot, such as free places and prices for stays
 
 <h1>User Resourse</h1>
 <h2>Add new User</h2>
@@ -205,6 +204,7 @@ When id is not valid
 {
     "message": "Invalid id"
 }
+</pre>
 <h2>Return prices only for input type</h2>
 <h4>Request all do that</h4>
 <pre>curl 127.0.0.1:5000/tarif/type/vip</pre>
@@ -222,3 +222,39 @@ When type is not valid
 {
     "message": "Invalid type"
 }
+</pre>
+<h1>Parking capacity Use for check has or not any free slot to enter new car in parking</h1>
+<h2>Return free slot in parking</h2>
+<h4>Request all do that</h4>
+<pre>curl 127.0.0.1:5000/parking/capacity</pre>
+<h4>Response</h4>
+<pre>
+5
+</pre>
+<h2>Post new value (only first record I get!)</h2>
+<h4>Request only admin do that</h4>
+<pre>curl 127.0.0.1:5000/parking/capacity -X POST -H "Content-Type:application/json" -H 'Authorization: Bearer {{token}} -d '{"capacity": 25}'</pre>
+<h4>Response</h4>
+<pre>
+{
+    "message": "Success insert parking capacity"
+}
+</pre>
+<h2>Edit Record</h2>
+<h4>Request only admin do that</h4>
+<pre>curl 127.0.0.1:5000/parking/capacity -X PUT -H "Content-Type:application/json" -H 'Authorization: Bearer {{token}} -d '{"capacity": 25}'</pre>
+<h4>Response</h4>
+<pre>
+{
+    "message": "Successfully change capacity"
+}
+</pre>
+<h2>Delete Record, delete while has any records. If you shoud to delete, delete all and then post new!</h2>
+<h4>Request only admin do that</h4>
+<pre>curl 127.0.0.1:5000/parking/capacity -X DELETE -H "Content-Type:application/json" -H 'Authorization: Bearer {{token}}</pre>
+<h4>Response</h4>
+<pre>
+{
+    "message": "Successfully change capacity"
+}
+</pre>
