@@ -28,7 +28,7 @@ def permission_required(permission):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             user = auth.current_user()
-            if not user.role == permission:
+            if not str(user.type) == str(permission):
                 raise Forbidden("You do not have the rights to access this resource")
             return f(*args, **kwargs)
 

@@ -5,6 +5,8 @@ from decouple import config
 from flask_httpauth import HTTPTokenAuth
 from werkzeug.exceptions import Unauthorized
 
+from models.users import UserModel
+
 
 class AuthManager:
     @staticmethod
@@ -32,6 +34,6 @@ auth = HTTPTokenAuth(scheme="Bearer")
 def verify_token(token):
     try:
         user_id, type_user = AuthManager.decode_token(token)
-        return eval(f"{type_user}.query.filter_by(id={user_id}).first()")
+        return UserModel.query.filter_by(id=user_id).first()
     except Exception as ex:
         raise Unauthorized("Invalid or missing token")

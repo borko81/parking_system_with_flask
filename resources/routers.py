@@ -1,4 +1,4 @@
-from resources.user_resource import UserRegisterRes, UserLoginRes, UserControlRes
+from resources.user_resource import UserRegisterRes, UserLoginRes, UserControlRes, ReturnAllUsersRes
 
 from resources.tarifs import TarifAllRes, TarifPricesRes, TarifConcretRes, ReturnPricesFromConcretTypeRes
 
@@ -10,6 +10,7 @@ from resources.parking_capacity_resource import ParkingCapacityRes
 
 routers = (
     (UserRegisterRes, "/user/register"),
+    (ReturnAllUsersRes, "/users"),
     (UserControlRes, "/user/<int:_id>"),
     (UserLoginRes, "/login"),
     (TarifAllRes, "/tarif"),

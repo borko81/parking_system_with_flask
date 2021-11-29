@@ -23,6 +23,13 @@ class UserRegisterManager(Resource):
 
 
 class UserDetailManager(Resource):
+
+    @staticmethod
+    def get_all_users():
+        users = UserModel.query.all()
+        schema = UserResponceSchema()
+        return schema.dump(users, many=True)
+
     @staticmethod
     def get_user(_id):
         user = UserModel.find_from_id(_id)

@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
 
-from helpers.decorator import validate_schema
+from helpers.decorator import validate_schema, permission_required
 from managers.user_manager import (
     UserRegisterManager,
     UserDetailManager,
@@ -10,6 +10,10 @@ from managers.user_manager import (
 from schemas.request.user_login_schema import UserLoginSchema
 from schemas.request.user_request_schema import UserRegisterSchema, UserEditSchema
 from schemas.response.user_response_schema import UserResponceSchema
+
+from models.enum import UserType
+from managers.auth import auth
+
 
 
 class UserRegisterRes(Resource):
@@ -21,6 +25,16 @@ class UserRegisterRes(Resource):
         """
         data = request.get_json()
         return UserRegisterManager.insert_new_name(data)
+
+
+class ReturnAllUsersRes(Resource):
+    """
+    usage: curl 127.0.0.1:5000/user/users
+    """
+    @auth.login_required
+    @permission_required(UserType.admin)
+    def get(self):
+        return UserDetailManager.get_all_users()
 
 
 class UserLoginRes(Resource):
@@ -36,6 +50,8 @@ class UserLoginRes(Resource):
 
 
 class UserControlRes(Resource):
+    @auth.login_required
+    @permission_required(UserType.admin)
     def get(self, _id):
         """
         usage: curl 127.0.0.1:5000/user/8
@@ -59,7 +75,7 @@ class UserControlRes(Resource):
     @validate_schema(UserEditSchema)
     def patch(self, _id):
         """
-        usage: curl 127.0.0.1:5000/user/8 -X PUT -H "Content-Type:application/json" -d '{"name": "Boris Second Last"}'
+        usage: curl 127.0.0.1:5000/user/8 -X PATCH -H "Content-Type:application/json" -d '{"name": "Boris Second Last"}'
         :param _id: int
         :return: json
         """

@@ -22,4 +22,4 @@ class UserType(Enum):
     admin = "Admin"
 
     def __str__(self):
-        return self.value
+        return str(self.value)

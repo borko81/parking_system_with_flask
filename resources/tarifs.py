@@ -1,13 +1,15 @@
 from flask import request
 from flask_restful import Resource
 
-from helpers.decorator import validate_schema
+from helpers.decorator import validate_schema, permission_required
+from managers.auth import auth
 from managers.tarif import TarifAllManager
 from managers.tarif_price_manager import (
     TarifPricesManager,
     TarifPriceFromConcretTypeManager,
     PriceForConcretTypeManager,
 )
+from models import UserType
 from schemas.request.tarif_price import TarifPriceRequestSchema
 from schemas.request.tarifl import TartifRequestSchema
 
@@ -22,6 +24,8 @@ class TarifAllRes(Resource):
         return {"all_tarife": data}, 200
 
     @validate_schema(TartifRequestSchema)
+    @auth.login_required
+    @permission_required(UserType.admin)
     def post(self):
         """
         Usage: curl 127.0.0.1:5000/tarif -X POST -H 'Content-Type: application/json' -d '{"name":"vip"}'
@@ -40,6 +44,8 @@ class TarifPricesRes(Resource):
         return TarifPricesManager.get_all_tarife_prices()
 
     @validate_schema(TarifPriceRequestSchema)
+    @auth.login_required
+    @permission_required(UserType.admin)
     def post(self):
         """
         usage:  curl 127.0.0.1:5000/tarif/price -X POST -H "Content-Type:application/json" -d '{"tarif_id": 2, "stay":"00:01", "price":1}'
@@ -62,6 +68,8 @@ class TarifConcretRes(Resource):
             200,
         )
 
+    @auth.login_required
+    @permission_required(UserType.admin)
     def put(self, _id: int):
         """
         usage:  curl 127.0.0.1:5000/tarif/price/2 -X PUT -H "Content-Type:application/json" -d '{"price": 20}'
@@ -77,6 +85,8 @@ class TarifConcretRes(Resource):
             200,
         )
 
+    @auth.login_required
+    @permission_required(UserType.admin)
     def delete(self, _id: int):
         return TarifPriceFromConcretTypeManager.delete_result(_id)
 
