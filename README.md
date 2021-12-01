@@ -420,5 +420,135 @@ When input data is valid return
 When not found that type_id return
 []
 </pre>
-
-
+<h1>Parking system</h1>
+<h2><Return all not already payed card in park</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request GET 'http://127.0.0.1:5000/parking' --header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>  
+<pre>
+Invalid data:
+{
+    "message": "Invalid or missing token"
+}
+Valid data:
+[
+    {
+        "id": 11,
+        "income": "2021-12-01 12:25:24.339172",
+        "card": "1234"
+    },
+    {
+        "id": 12,
+        "income": "2021-12-01 12:39:19.151390",
+        "card": "123456"
+    }
+]
+</pre>
+<h2>Insert new card in park</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request POST 'http://127.0.0.1:5000/parking' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{"card": "123456"}'
+</pre>
+<h4>Response</h4>  
+<pre>
+When car not found return:
+{
+    "message": "This card not found on server, try with another"
+}
+When Data is corect return:
+{
+    "id": 11,
+    "income": "2021-12-01 12:25:24.339172",
+    "card": "1234"
+}
+When not enough free space return
+{
+    "message": "Not Enough space in park"
+}
+When card has expired time return
+{
+    "message": "This card is nо longer valid"
+}
+</pre>
+<h2>Return Parking Detail Only Admin allowed to do that</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request GET 'http://127.0.0.1:5000/parking/detail/11' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>  
+<pre>
+When data is valid return:
+{
+    "card": "123456",
+    "otc_id": null,
+    "pay": true,
+    "tarif_id": 45,
+    "id": 12,
+    "income": "2021-12-01 12:39:19.151390",
+    "outcome": null,
+    "price": null
+}
+When id not found return
+{
+    "message": "Not found this id 115"
+}
+When not user make request return:
+{
+    "message": "You do not have the rights to access this resource"
+}
+</pre>
+<h2>Edit Card in Park, card give from id</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request PUT 'http://127.0.0.1:5000/parking/detail/12' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}' \
+--data-raw '{
+    "card": "123456",
+    "otc_id": null,
+    "pay": true,
+    "tarif_id": 45,
+    "id": 12,
+    "income": "2021-11-01 12:39:19.151390",
+    "outcome": null,
+    "price": null
+}'
+</pre>
+<h4>Response</h4>  
+<pre>
+Whene data is valid:
+{
+    "card": "123456",
+    "otc_id": null,
+    "pay": true,
+    "tarif_id": 45,
+    "id": 12,
+    "income": "2021-11-01 12:39:19.151390",
+    "outcome": null,
+    "price": null
+}
+When card pay is True return:
+{
+    "message": "Card is already payed, not allow editing!"
+}
+</pre>
+<h2>Delete card from park, only if not already payed</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request DELETE 'http://127.0.0.1:5000/parking/detail/12' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>  
+<pre>
+Whene data is valid:
+204
+When card pay is True return:
+{
+    "message": "Card is already payed, not allow editing!"
+}
+</pre>
