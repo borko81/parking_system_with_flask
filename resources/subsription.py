@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from helpers.decorator import validate_schema
+from managers.auth import auth
 from managers.subscription_manager import (
     SubscribeManager,
     SubsribeConcretManager,
@@ -13,6 +14,7 @@ from schemas.response.subscription import SubscribeResponseSchema
 
 class SubscriptionRes(Resource):
     @staticmethod
+    @auth.login_required
     def get():
         """
         usage: curl 127.0.0.1:5000/subscription
@@ -22,6 +24,7 @@ class SubscriptionRes(Resource):
         return schema.dump(result, many=True)
 
     @validate_schema(SubscribeResquestSchema)
+    @auth.login_required
     def post(self):
         """
         usage: curl 127.0.0.1:5000/subscription -X POST -H "Content-type:application/json" -d
@@ -34,6 +37,7 @@ class SubscriptionRes(Resource):
 
 class SubscribeFromIdRes(Resource):
     @staticmethod
+    @auth.login_required
     def get(_id):
         """
         usage:  curl 127.0.0.1:5000/subscription/14
@@ -45,6 +49,7 @@ class SubscribeFromIdRes(Resource):
         return schema.dump(res.first())
 
     @validate_schema(SubscribeForEditSchema)
+    @auth.login_required
     def put(self, _id):
         """
         usage: curl 127.0.0.1:5000/subscription/2 -X PUT -H "Content-type:application/json" -d
@@ -56,6 +61,7 @@ class SubscribeFromIdRes(Resource):
         return schema.dump(res.first())
 
     @staticmethod
+    @auth.login_required
     def delete(_id):
         """
         usage: curl 127.0.0.1:5000/subscription/21 -X DELETE

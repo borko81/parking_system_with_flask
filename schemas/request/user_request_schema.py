@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, validate, ValidationError
 from password_strength import PasswordPolicy
+from decouple import config
 
 policy = PasswordPolicy.from_names(uppercase=1, numbers=1)
 
@@ -22,21 +23,21 @@ def validate_name(value):
 
 class UserRegisterSchema(Schema):
     name = fields.String(
-        required=True, validate=validate.And(validate.Length(max=32), validate_name)
+        required=True,
+        validate=validate.And(
+            validate.Length(max=config("USER_NAME_FIELD_LENGTH", cast=int)),
+            validate_name,
+        ),
     )
     password = fields.String(
         required=True,
-        validate=validate.And(validate.Length(max=250), validate_password),
+        validate=validate.And(
+            validate.Length(max=config("USER_PASSWORD_FIELD_LENGTH", cast=int)),
+            validate_password,
+        ),
     )
     type = fields.String(required=False)
 
 
-class UserEditSchema(Schema):
-    name = fields.String(
-        required=False, validate=validate.And(validate.Length(max=32), validate_name)
-    )
-    password = fields.String(
-        required=False,
-        validate=validate.And(validate.Length(max=250), validate_password),
-    )
-    type = fields.String(required=False)
+class UserEditSchema(UserRegisterSchema):
+    pass

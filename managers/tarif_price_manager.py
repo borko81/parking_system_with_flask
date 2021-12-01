@@ -1,6 +1,7 @@
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 
 from db import db
+from helpers.data_preparation import data_preparate_for_commit
 from models.tarif_el import TarifPiceModel
 from models.tarif_type import TariffTypeModel
 from schemas.request.tarif_price import TarifPriceRequestSchema, PriceForConcretTarType
@@ -11,8 +12,7 @@ class TarifPricesManager:
     def input_new_price(data):
         schema = TarifPriceRequestSchema()
         result = TarifPiceModel(**data)
-        db.session.add(result)
-        db.session.flush()
+        data_preparate_for_commit(result)
         return schema.dump(result)
 
     @staticmethod
@@ -28,7 +28,7 @@ class TarifPriceFromConcretTypeManager:
         result = TarifPiceModel.query.filter_by(id=_id)
         if result.first():
             return result
-        raise BadRequest("Invalid id")
+        raise NotFound("Invalid id")
 
     @staticmethod
     def edit_result(_id, data):
@@ -52,4 +52,4 @@ class PriceForConcretTypeManager:
             result = TarifPiceModel.query.filter_by(tarif_id=search_type.id)
             return schema.dump(result, many=True)
         except Exception:
-            raise BadRequest("Invalid type")
+            raise NotFound("Invalid type")

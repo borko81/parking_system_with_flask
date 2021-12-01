@@ -1,9 +1,11 @@
-from schemas.base_subscription import BaseSubscribeResquestSchema
+from schemas.base_subscription import BaseSubscribeRequestSchema
 from marshmallow import fields, validate
 
-class SubscribeResquestSchema(BaseSubscribeResquestSchema):
+
+class SubscribeResquestSchema(BaseSubscribeRequestSchema):
     pass
 
-class SubscribeForEditSchema(BaseSubscribeResquestSchema):
+
+class SubscribeForEditSchema(BaseSubscribeRequestSchema):
     card = fields.String(validate=validate.Length(max=20), required=False)
     tar_type_id = fields.Integer(required=False)

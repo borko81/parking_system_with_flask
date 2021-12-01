@@ -9,7 +9,7 @@ class ParkCapacityManager:
     def get_capacity():
         cap = ParkingCapacityModel.query.order_by("id").first()
         if cap:
-            return cap.capacity
+            return cap
         raise BadRequest("Enter parking capacity")
 
     @staticmethod

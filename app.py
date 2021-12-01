@@ -31,7 +31,8 @@ def close_request(response):
 def handle_db_exceptions(error):
     #log the error: app.logger.error(error)
     db.session.rollback()
-    raise BadRequest("Error acquire when try to commit data")
+    # raise BadRequest("Error acquire when try to commit data")
+    raise BadRequest(error)
 
 
 @app.route("/test_is_alive")

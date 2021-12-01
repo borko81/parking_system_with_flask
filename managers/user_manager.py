@@ -1,29 +1,30 @@
 from flask_restful import Resource
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
 from managers.auth import AuthManager
 from models.users import UserModel
 from schemas.response.user_response_schema import UserResponceSchema
+from schemas.request.user_request_schema import UserRegisterSchema
+from helpers.decorator import validate_schema
+from helpers.data_preparation import data_preparate_for_commit
 
 
 class UserRegisterManager(Resource):
     @staticmethod
+    @validate_schema(UserRegisterSchema)
     def insert_new_name(data):
         schema = UserResponceSchema()
-        username = data["name"]
-        if UserModel.find_from_name(username) is None:
+        if UserModel.find_from_name(data["name"]) is None:
             data["password"] = generate_password_hash(data["password"])
             user = UserModel(**data)
-            db.session.add(user)
-            db.session.commit()
+            data_preparate_for_commit(user)
             return schema.dump(user)
-        raise BadRequest("Invalid username {}".format(username))
+        raise BadRequest("Invalid data, try again")
 
 
 class UserDetailManager(Resource):
-
     @staticmethod
     def get_all_users():
         users = UserModel.query.all()
@@ -35,11 +36,22 @@ class UserDetailManager(Resource):
         user = UserModel.find_from_id(_id)
         if user.first() is not None:
             return user
-        raise BadRequest("Invalid id {}".format(_id))
+        raise NotFound("Invalid id {}".format(_id))
 
     @staticmethod
     def edit_user(_id, data):
+        """
+        Check in data user input password, if true encrypt, else continue
+        model use for put and patch option
+        :param _id:
+        :param data: json
+        :return: json
+        """
         user = UserDetailManager.get_user(_id)
+        try:
+            data["password"] = generate_password_hash(data["password"])
+        except KeyError:
+            pass
         user.update(data)
         return user
 

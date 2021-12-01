@@ -27,10 +27,6 @@ class TarifAllRes(Resource):
     @auth.login_required
     @permission_required(UserType.admin)
     def post(self):
-        """
-        Usage: curl 127.0.0.1:5000/tarif -X POST -H 'Content-Type: application/json' -d '{"name":"vip"}'
-        :return: New tarif or BadRequest if data is invalid
-        """
         data = request.get_json()
         return TarifAllManager.input_new_tarif(data)
 

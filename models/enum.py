@@ -1,3 +1,7 @@
+"""
+Use return self.value, because it Enum class, think it is more good, then import third party import
+"""
+
 from enum import Enum
 
 

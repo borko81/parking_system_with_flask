@@ -1,6 +1,7 @@
 from marshmallow import fields
 
-from schemas.base_subscription import BaseSubscribeResquestSchema
+from schemas.base_subscription import BaseSubscribeRequestSchema
 
-class SubscribeResponseSchema(BaseSubscribeResquestSchema):
+
+class SubscribeResponseSchema(BaseSubscribeRequestSchema):
     id = fields.Integer()

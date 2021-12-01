@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, validate
 
 
-class BaseSubscribeResquestSchema(Schema):
+class BaseSubscribeRequestSchema(Schema):
     card = fields.String(validate=validate.Length(max=20), required=True)
     name = fields.String(validate=validate.Length(max=20), required=False)
     email = fields.Email(required=False)

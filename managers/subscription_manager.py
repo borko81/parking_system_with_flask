@@ -1,4 +1,4 @@
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 
 from db import db
 from models.subscription import SubscriptionModel
@@ -7,12 +7,19 @@ from models.subscription import SubscriptionModel
 class SubscribeManager:
     @staticmethod
     def insert_new(data):
+        """
+        First validate card already exists in table if true, raise Error, else insert it.
+        :param data:
+        :return:
+        """
         if SubscriptionModel.get_from_card(data["card"]).first():
             raise BadRequest("Card already exists")
         insert_in_model = SubscriptionModel(**data)
         db.session.add(insert_in_model)
         db.session.flush()
-        return "Successfully added card with id {}".format(insert_in_model.id)
+        return {
+            "message": "Successfully added card with id {}".format(insert_in_model.id)
+        }
 
     @staticmethod
     def get_subscriptions():
@@ -25,10 +32,10 @@ class SubsribeConcretManager:
         sub = SubscriptionModel.query.filter_by(id=_id)
         if sub.first():
             return sub
-        raise BadRequest("Invalid id {}".format(_id))
+        raise NotFound("Invalid id {}".format(_id))
 
     @staticmethod
-    def edit_sub(_id, data):
+    def edit_sub(_id: int, data):
         sub = SubsribeConcretManager.get_sub(_id)
         sub.update(data)
         db.session.flush()
@@ -39,6 +46,7 @@ class SubsribeConcretManager:
         sub = SubsribeConcretManager.get_sub(_id)
         db.session.delete(sub.first())
         return 204
+
 
 class SubscribeShowFromTypeManager:
     @staticmethod
