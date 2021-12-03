@@ -88,9 +88,10 @@ class ParkingManager:
     @staticmethod
     def input_new_car_in_park(data):
         """
-        !!! Need at least one seconds before second request!!!
         If card not in park, insert it, otherwise, found card
         and update his param, add outcome time, price and so on.
+        Calculate the time spent of a car at parking lot when the info
+        by card or by id is retrieved.
         """
         card: SubscriptionModel = SubscriptionModel.get_from_card(data["card"]).first()
 

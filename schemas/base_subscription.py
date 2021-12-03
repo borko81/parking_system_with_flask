@@ -8,3 +8,4 @@ class BaseSubscribeRequestSchema(Schema):
     tar_type_id = fields.Integer(required=True)
     active_date_from = fields.String(required=False)
     active_date_to = fields.String(required=False)
+    photo = fields.String(required=False)

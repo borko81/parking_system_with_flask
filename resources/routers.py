@@ -1,3 +1,6 @@
+from resources.weather_info import WeatherInfo
+from resources.parking_user_info_weather_and_free_slot import ForUsersPArkingInfo
+
 from resources.user_resource import (
     UserRegisterRes,
     UserLoginRes,
@@ -28,6 +31,8 @@ from resources.parking import (
 from resources.parking_capacity_resource import ParkingCapacityRes
 
 routers = (
+    (ForUsersPArkingInfo, '/parking_info'),
+    (WeatherInfo, "/weather"),
     (UserRegisterRes, "/user/register"),
     (ReturnAllUsersRes, "/users"),
     (UserControlRes, "/user/<int:_id>"),
