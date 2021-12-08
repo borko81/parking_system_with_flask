@@ -1,5 +1,6 @@
 from decouple import config
 from datetime import datetime
+from sqlalchemy.sql import func
 
 from db import db
 
@@ -19,7 +20,7 @@ class ParkModel(db.Model):
         index=True,
     )
     tarif_id = db.Column(db.String(10), nullable=False)
-    income = db.Column(db.DateTime, default=datetime.now())
+    income = db.Column(db.DateTime, default=func.now())
     outcome = db.Column(db.DateTime, nullable=True, default=None)
     price = db.Column(db.Numeric(10, 2), nullable=True, default=None)
     pay = db.Column(db.Boolean, default=False)

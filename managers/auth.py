@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import jwt
 from decouple import config
 from flask_httpauth import HTTPTokenAuth
-from werkzeug.exceptions import Unauthorized
+from werkzeug.exceptions import Unauthorized, BadRequest
 
 from models.users import UserModel
 
@@ -23,6 +23,8 @@ class AuthManager:
         try:
             info = jwt.decode(jwt=token, key=config("SECRET_KEY"), algorithms=["HS256"])
             return info["sub"], info["type"]
+        except jwt.ExpiredSignatureError:
+            raise BadRequest("Token is expired")
         except Exception as ex:
             raise ex
 

@@ -71,10 +71,10 @@ class SubscribeFromIdRes(Resource):
 
 class SubscriptionFromType(Resource):
     @staticmethod
-    def get(_id):
+    def get(_type):
         """
         usage: curl 127.0.0.1:5000/subscription/type/2
         """
         schema = SubscribeResponseSchema()
-        model_result = SubscribeShowFromTypeManager.get_all_from_type(_id)
+        model_result = SubscribeShowFromTypeManager.get_all_from_type(_type)
         return schema.dump(model_result, many=True)

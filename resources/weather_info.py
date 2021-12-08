@@ -15,7 +15,7 @@ class WeatherInfo(Resource):
             data = {
                 "Name": json_data["name"],
                 "Temperature": json_data["main"]["temp"],
-                "FeelsLike": json_data['main']["feels_like"]
+                "FeelsLike": json_data["main"]["feels_like"],
             }
             return data
         else:

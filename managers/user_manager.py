@@ -3,12 +3,12 @@ from werkzeug.exceptions import BadRequest, NotFound
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db import db
+from helpers.data_preparation import data_preparate_for_commit
+from helpers.decorator import validate_schema
 from managers.auth import AuthManager
 from models.users import UserModel
-from schemas.response.user_response_schema import UserResponceSchema
 from schemas.request.user_request_schema import UserRegisterSchema
-from helpers.decorator import validate_schema
-from helpers.data_preparation import data_preparate_for_commit
+from schemas.response.user_response_schema import UserResponceSchema
 
 
 class UserRegisterManager(Resource):

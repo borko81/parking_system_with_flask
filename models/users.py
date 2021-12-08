@@ -3,16 +3,17 @@ from sqlalchemy import func
 
 from db import db
 from models.enum import UserType
+from helpers.striped_fields_in_model import StrippedString
 
 
 class UserModel(db.Model):
     """
-    Model save user privileg, use two more cls method to optimize searches.
+    Model save user privilege, use two more cls method to optimize searches.
     """
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(
-        db.String(config("USER_NAME_FIELD_LENGTH", cast=int)),
+        StrippedString(config("USER_NAME_FIELD_LENGTH", cast=int)),
         nullable=False,
         unique=True,
     )

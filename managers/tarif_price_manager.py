@@ -1,4 +1,4 @@
-from werkzeug.exceptions import BadRequest, NotFound
+from werkzeug.exceptions import NotFound
 
 from db import db
 from helpers.data_preparation import data_preparate_for_commit

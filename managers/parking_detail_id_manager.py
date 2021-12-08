@@ -10,6 +10,7 @@ class ParkingDetailFromIdManager:
     If the query not found any car with the sent id, the returned
     value will be a HTTP 404 response
     """
+
     @staticmethod
     def get_from_id(_id):
         check_id_exists = ParkModel.query.filter_by(id=_id)

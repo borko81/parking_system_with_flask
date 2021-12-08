@@ -26,3 +26,7 @@ class SubscriptionModel(db.Model):
     @classmethod
     def get_from_type(cls, tar_type_id):
         return cls.query.filter_by(tar_type_id=tar_type_id)
+
+    @classmethod
+    def get_from_email(cls, _email):
+        return cls.query.filter_by(email=_email)

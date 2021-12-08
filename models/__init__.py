@@ -5,3 +5,5 @@ from models.tarif_type import *
 from models.tarif_el import *
 from models.users import *
 from models.otc_model import *
+from models.payment_transaction import *
+from models.pay_type import *
