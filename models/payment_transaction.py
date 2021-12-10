@@ -10,3 +10,4 @@ class Transaction(db.Model):
     created_on = db.Column(db.DateTime, server_default=func.now())
     transaction_id = db.Column(db.Integer, nullable=False, default=None)
     pay_type = db.Column(db.Integer, db.ForeignKey("pay_type.id"), nullable=False)
+    park_pay = db.relationship("ParkModel", backref="park_pay")

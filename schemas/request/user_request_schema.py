@@ -1,6 +1,6 @@
+from decouple import config
 from marshmallow import Schema, fields, validate, ValidationError
 from password_strength import PasswordPolicy
-from decouple import config
 
 policy = PasswordPolicy.from_names(uppercase=1, numbers=1)
 

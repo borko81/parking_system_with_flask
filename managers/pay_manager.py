@@ -20,6 +20,8 @@ def validate_already_payed_raise_error_else_return_what_needed(check_id):
     result = ParkingDetailFromIdManager.get_from_id(check_id)
     if result.first().pay:
         raise BadRequest("This bill already is payed")
+    if not result.first().price:
+        raise BadRequest("This card not have bill yet")
     result = ParkingDetailFromIdManager.get_from_id(check_id)
     price = result.first().price
     return result, price

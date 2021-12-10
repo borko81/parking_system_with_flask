@@ -13,6 +13,26 @@ from schemas.parking_schemas import ParkResponseSchema
 today = datetime.now()
 
 
+class ValidateCardFoundAndCardDateValidate:
+    def __init__(self, card: SubscriptionModel):
+        self.card = card
+
+    def validate_car_outgoing_is_valid(self):
+        if not self.card:
+            raise NotFound("This card not found on server, try with another")
+        elif (
+            self.card and self.card.active_date_to and self.card.active_date_to < today
+        ):
+            raise BadRequest("This card is nо longer valid")
+
+
+class ValidateHasFreeSLots:
+    @staticmethod
+    def validate_has_free_slot():
+        if ParkingManager.get_free_space_in_park() == 0:
+            raise BadRequest("Not Enough space in park")
+
+
 def validate_car_already_in_park(user_card):
     """
     Check car already in park
@@ -59,7 +79,9 @@ def calculate_taxes_of_car(car):
         price = TarifPiceModel.query.filter(TarifPiceModel.stay <= total_time)[-1]
         return price.price
     except IndexError:
-        raise BadRequest("This card stay less then 1 minute")
+        raise BadRequest(
+            f"This card stay less then 1 minute, you may want to delete record with id {car.first().id}"
+        )
 
 
 def total_update_car_end_time_and_tax(car):
@@ -95,13 +117,8 @@ class ParkingManager:
         """
         card: SubscriptionModel = SubscriptionModel.get_from_card(data["card"]).first()
 
-        if not card:
-            raise NotFound("This card not found on server, try with another")
-        elif card and card.active_date_to and card.active_date_to < today:
-            raise BadRequest("This card is nо longer valid")
-
-        if ParkingManager.get_free_space_in_park() == 0:
-            raise BadRequest("Not Enough space in park")
+        ValidateCardFoundAndCardDateValidate(card).validate_car_outgoing_is_valid()
+        ValidateHasFreeSLots.validate_has_free_slot()
 
         test_car_already_in_park = validate_car_already_in_park(data["card"])
 

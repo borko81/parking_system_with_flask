@@ -1,12 +1,29 @@
-from resources.weather_info import WeatherInfo
-from resources.parking_user_info_weather_and_free_slot import ForUsersPArkingInfo
+from resources.generate_otc import GenerateOtcResourse, ShowOtcDetail
+from resources.parking import (
+    ParkingRes,
+    ParkingPayRes,
+    ParkingAlreadyPay,
+    ParkingDetailInfoRes,
+)
+from resources.parking_capacity_resource import ParkingCapacityRes
+from resources.parking_user_info_weather_and_free_slot import ForUsersParkingInfo
 from resources.pay_resource import PayResourse
 from resources.pay_type_resourse import PayTypeResourse, PayTypeIdResourse
+from resources.subsription import (
+    SubscriptionRes,
+    SubscribeFromIdRes,
+    SubscriptionFromType,
+)
+from resources.tarifs import (
+    TarifAllRes,
+    TarifPricesRes,
+    TarifConcretRes,
+    ReturnPricesFromConcretTypeRes,
+)
 from resources.transactions_resourse import (
     TransactionsResourse,
     TransactionInfoResourse,
 )
-
 from resources.user_resource import (
     UserRegisterRes,
     UserLoginRes,
@@ -14,31 +31,8 @@ from resources.user_resource import (
     ReturnAllUsersRes,
 )
 
-from resources.tarifs import (
-    TarifAllRes,
-    TarifPricesRes,
-    TarifConcretRes,
-    ReturnPricesFromConcretTypeRes,
-)
-
-from resources.subsription import (
-    SubscriptionRes,
-    SubscribeFromIdRes,
-    SubscriptionFromType,
-)
-
-from resources.parking import (
-    ParkingRes,
-    ParkingPayRes,
-    ParkingAlreadyPay,
-    ParkingDetailInfoRes,
-)
-
-from resources.parking_capacity_resource import ParkingCapacityRes
-
 routers = (
-    (ForUsersPArkingInfo, "/parking_info"),
-    (WeatherInfo, "/weather"),
+    (ForUsersParkingInfo, "/parking_info"),
     (UserRegisterRes, "/user/register"),
     (ReturnAllUsersRes, "/users"),
     (UserControlRes, "/user/<int:_id>"),
@@ -60,4 +54,6 @@ routers = (
     (PayResourse, "/parking/<int:_id>/<string:pay>"),
     (TransactionsResourse, "/transactions"),
     (TransactionInfoResourse, "/transaction"),
+    (GenerateOtcResourse, "/otc"),
+    (ShowOtcDetail, "/otc/<int:_id>"),
 )

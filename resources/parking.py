@@ -6,7 +6,7 @@ from managers.auth import auth
 from managers.park_manager import ParkingManager
 from managers.parking_detail_id_manager import ParkingDetailFromIdManager
 from models import UserType
-from schemas.parking_schemas import ParkEnterSchema, ParkResponseSchema
+from schemas.parking_schemas import ParkEnterSchema
 from schemas.request.park_request_schema import ParkRequestSchemaForEdit
 from schemas.response.park_response_schema import ParkResponseSchema as park_res_schema
 

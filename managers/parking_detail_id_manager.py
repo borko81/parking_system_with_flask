@@ -32,7 +32,7 @@ class ParkingDetailFromIdManager:
         Destroy function to allow destroy registers by
         id cars by
         :param _id: int
-        :return: 204 if id found else BadREquest
+        :return: 204 if id found else BadRequest
         """
         car: ParkModel = ParkingDetailFromIdManager.get_from_id(_id)
         if car.first().pay:

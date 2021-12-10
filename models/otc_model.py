@@ -1,3 +1,7 @@
+from typing import List
+
+from sqlalchemy import func
+
 from db import db
 
 
@@ -6,4 +10,5 @@ class OtcModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user_model.id"), nullable=False)
-    park_otc = db.relationship("ParkModel", backref="park_otc", lazy="dynamic")
+    created_on = db.Column(db.DateTime, server_default=func.now())
+    park_otc: List = db.relationship("ParkModel", backref="park_otc", lazy="dynamic")

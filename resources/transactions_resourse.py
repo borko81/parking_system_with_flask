@@ -1,9 +1,9 @@
 from flask import request
 from flask_restful import Resource
 
-from managers.transactions_manager import TransactionsManager, TransactionsInfoManager
-from managers.auth import auth
 from helpers.decorator import permission_required
+from managers.auth import auth
+from managers.transactions_manager import TransactionsManager, TransactionsInfoManager
 from models.enum import UserType
 
 

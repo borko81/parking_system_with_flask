@@ -1,6 +1,6 @@
 from flask_restful import Resource
+
 from managers.pay_manager import PayWiseManager, PayCashManager
-from resources.parking import ParkingDetailInfoRes
 
 mapper = {
     "wise": lambda x: PayWiseManager.new_pay(x),

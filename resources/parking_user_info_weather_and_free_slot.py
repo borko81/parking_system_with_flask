@@ -1,9 +1,10 @@
-from resources.parking_capacity_resource import ParkingCapacityRes
-from resources.weather_info import WeatherInfo
 from flask_restful import Resource
 
+from resources.parking_capacity_resource import ParkingCapacityRes
+from services.weather_info import WeatherInfo
 
-class ForUsersPArkingInfo(Resource):
+
+class ForUsersParkingInfo(Resource):
     def get(self):
         parking_slot = ParkingCapacityRes.get()
         weather = WeatherInfo.get()

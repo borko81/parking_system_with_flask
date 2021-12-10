@@ -1,6 +1,7 @@
 from werkzeug.exceptions import BadRequest
 
 from db import db
+from helpers.data_preparation import data_preparate_for_commit
 from models.parking_capacity import ParkingCapacityModel
 
 
@@ -15,8 +16,7 @@ class ParkCapacityManager:
     @staticmethod
     def insert_capacity(data):
         cap = ParkingCapacityModel(capacity=data)
-        db.session.add(cap)
-        db.session.flush()
+        data_preparate_for_commit(cap)
         return {"message": "Success insert parking capacity"}, 201
 
     @staticmethod

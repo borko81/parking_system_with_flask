@@ -1,5 +1,6 @@
-from schemas.pay_type_base_schema import PayTypeBaseSchema
 from marshmallow import fields
+
+from schemas.pay_type_base_schema import PayTypeBaseSchema
 
 
 class PayTypeResponseSchema(PayTypeBaseSchema):

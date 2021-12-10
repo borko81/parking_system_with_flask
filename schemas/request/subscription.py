@@ -1,5 +1,6 @@
-from schemas.base_subscription import BaseSubscribeRequestSchema
 from marshmallow import fields, validate
+
+from schemas.base_subscription import BaseSubscribeRequestSchema
 
 
 class SubscribeResquestSchema(BaseSubscribeRequestSchema):

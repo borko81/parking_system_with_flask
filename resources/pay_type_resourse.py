@@ -1,11 +1,11 @@
 from flask import request
 from flask_restful import Resource
 
-from managers.pay_type_manager import PayTypeManager, PayTypeIDManager
 from helpers.decorator import validate_schema, permission_required
-from schemas.request.pay_type_request import PayTypeRequest
 from managers.auth import auth
+from managers.pay_type_manager import PayTypeManager, PayTypeIDManager
 from models.enum import UserType
+from schemas.request.pay_type_request import PayTypeRequest
 from schemas.response.pay_type_response_schema import PayTypeResponseSchema
 
 

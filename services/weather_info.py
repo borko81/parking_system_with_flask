@@ -1,6 +1,6 @@
-from flask_restful import Resource
-from decouple import config
 import requests
+from decouple import config
+from flask_restful import Resource
 from werkzeug.exceptions import BadRequest
 
 
@@ -14,8 +14,9 @@ class WeatherInfo(Resource):
             json_data = check.json()
             data = {
                 "Name": json_data["name"],
-                "Temperature": json_data["main"]["temp"],
-                "FeelsLike": json_data["main"]["feels_like"],
+                "Temperature": round(json_data["main"]["temp"]),
+                "FeelsLike": round(json_data["main"]["feels_like"]),
+                "Weather": json_data["weather"][0]["description"],
             }
             return data
         else:
