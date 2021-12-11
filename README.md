@@ -2,6 +2,11 @@
 
 Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The authorized users have access to the basic data about the parking lot, such as free places and prices for stays
 
+<h1>Swagger url</h1>
+<pre>http://127.0.0.1:5000/apidocs/</pre>
+
+<h1>URL Documentation</h1>
+
 <h1>User Resourse</h1>
 <h2>Add new User</h2>
 <h4>Request</h4>
