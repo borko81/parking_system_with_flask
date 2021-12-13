@@ -836,3 +836,55 @@ For all transaction
     "id": 3
 }
 </pre>
+<h2>OTC generate and show, login required</h2>
+<h4>Generate otc, all already payment card is close in otc id</h4>
+<pre>
+curl --location --request POST 'http://127.0.0.1:5000/otc' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>
+<pre>
+{
+    "message": "Success",
+    "otc_id": 5
+}
+</pre>
+<h4>Show otc id, login required, request</h4>
+<pre>
+curl --location --request GET 'http://127.0.0.1:5000/otc/5' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>
+<pre>
+{
+    "created_on": "2021-12-13T17:41:29.016606",
+    "park_otc": [
+        {
+            "card": "12345",
+            "tarif_id": 2,
+            "outcome": "2021-12-13 17:30:56.839602",
+            "pay": true,
+            "park_pay": [
+                {
+                    "pay_type": 1,
+                    "pr_id": 88,
+                    "created_on": "2021-12-13T17:33:05.919786",
+                    "payment_name": {
+                        "name": "cash"
+                    },
+                    "transaction_id": -2,
+                    "id": 14
+                }
+            ],
+            "income": "2021-12-13 17:26:26.437234",
+            "otc_id": 5,
+            "price": 1.0,
+            "id": 88
+        }
+    ],
+    "user_id": 17,
+    "id": 5
+}
+</pre>
