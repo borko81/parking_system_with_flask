@@ -42,6 +42,7 @@ class ParkingDetailInfoRes(Resource):
 
     @validate_schema(ParkRequestSchemaForEdit)
     @auth.login_required
+    @permission_required(UserType.admin)
     def put(self, _id):
         data = request.get_json()
         result = ParkingDetailFromIdManager.edit_car_in_park(_id, data)

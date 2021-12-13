@@ -17,8 +17,15 @@ from schemas.request.tarifl import TartifRequestSchema
 class TarifAllRes(Resource):
     def get(self):
         """
-        :usage: curl 127.0.0.1:5000/tarif
-        :return: List with all tarif
+        Return all tarif plan
+        ---
+        tags:
+        - Tarife plan
+        responses:
+          200:
+            description: Return users info
+            examples:
+              url: /user/10
         """
         data = TarifAllManager.get_all_tarif()
         return {"all_tarife": data}, 200
@@ -27,6 +34,24 @@ class TarifAllRes(Resource):
     @auth.login_required
     @permission_required(UserType.admin)
     def post(self):
+        """
+        Post new tarife
+        ---
+        tags:
+        - Tarife plan
+        parameters:
+        - name: Authorization
+          in: header
+        - name: name
+          in: body
+        responses:
+          201:
+                description: Success
+          401:
+                description: Unauthorized
+          400:
+            description: That name not valid
+        """
         data = request.get_json()
         return TarifAllManager.input_new_tarif(data)
 
@@ -34,8 +59,13 @@ class TarifAllRes(Resource):
 class TarifPricesRes(Resource):
     def get(self):
         """
-        usage: curl 127.0.0.1:5000/tarif/price
-        :return: json data with all prices for stay
+        Return all tarif price
+        ---
+        tags:
+        - Tarife plan
+        responses:
+          200:
+            description: OK
         """
         return TarifPricesManager.get_all_tarife_prices()
 
@@ -44,8 +74,24 @@ class TarifPricesRes(Resource):
     @permission_required(UserType.admin)
     def post(self):
         """
-        usage:  curl 127.0.0.1:5000/tarif/price -X POST -H "Content-Type:application/json" -d '{"tarif_id": 2, "stay":"00:01", "price":1}'
-        :return: json with new data
+        Post new price
+        ---
+        tags:
+        - Tarife plan
+        parameters:
+        - name: Authorization
+          in: header
+        - name: tarif_id
+          in: body
+        - name: price
+          in: body
+        - name: stay
+          in: body
+        responses:
+          201:
+                description: Success
+          401:
+                description: Unauthorized
         """
         data = request.get_json()
         return TarifPricesManager.input_new_price(data)
@@ -54,9 +100,18 @@ class TarifPricesRes(Resource):
 class TarifConcretRes(Resource):
     def get(self, _id: int):
         """
-        usage: curl 127.0.0.1:5000/tarif/price/2
-        :param _id: int
-        :return: json data with result
+        From given id return price info with this id, when id not valid return NotFound
+        ---
+        tags:
+        - Tarife plan
+        parameters:
+        - name: _id
+          in: path
+        responses:
+          200:
+                description: OK
+          404:
+                description: Not found that id
         """
         schema = TarifPriceRequestSchema()
         return (
@@ -84,9 +139,41 @@ class TarifConcretRes(Resource):
     @auth.login_required
     @permission_required(UserType.admin)
     def delete(self, _id: int):
+        """
+        From given id return price who may deleted
+        ---
+        tags:
+        - Tarife plan
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        responses:
+          200:
+                description: OK
+          404:
+                description: Not found that id
+        """
         return TarifPriceFromConcretTypeManager.delete_result(_id)
 
 
 class ReturnPricesFromConcretTypeRes(Resource):
     def get(self, type: str):
+        """
+        From given type return prices
+        ---
+        tags:
+        - Tarife plan
+        parameters:
+        - name: Authorization
+          in: header
+        - name: type
+          in: path
+        responses:
+          200:
+                description: OK
+          404:
+                description: Not found that type
+        """
         return PriceForConcretTypeManager.get_price_from_type(type)

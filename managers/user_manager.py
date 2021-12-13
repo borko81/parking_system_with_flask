@@ -9,6 +9,7 @@ from managers.auth import AuthManager
 from models.users import UserModel
 from schemas.request.user_request_schema import UserRegisterSchema
 from schemas.response.user_response_schema import UserResponceSchema
+from services.send_email_with_gmail import send_email_notification
 
 
 class UserRegisterManager(Resource):
@@ -20,6 +21,7 @@ class UserRegisterManager(Resource):
             data["password"] = generate_password_hash(data["password"])
             user = UserModel(**data)
             data_preparate_for_commit(user)
+            send_email_notification(data["name"])
             return schema.dump(user)
         raise BadRequest("Invalid data, try again")
 

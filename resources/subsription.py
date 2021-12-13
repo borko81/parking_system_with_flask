@@ -17,7 +17,18 @@ class SubscriptionRes(Resource):
     @auth.login_required
     def get():
         """
-        usage: curl 127.0.0.1:5000/subscription
+        Return all card subscribe
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        responses:
+          200:
+            description: Ok
+          401:
+            description: Unauthorized
         """
         result = SubscribeManager.get_subscriptions()
         schema = SubscribeResponseSchema()
@@ -27,8 +38,22 @@ class SubscriptionRes(Resource):
     @auth.login_required
     def post(self):
         """
-        usage: curl 127.0.0.1:5000/subscription -X POST -H "Content-type:application/json" -d
-                                                '{"card": "1234", "email":"test@abv.bg", "tar_type_id": 2}'
+        Insert new card
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        - name: data
+          in: body
+        responses:
+          201:
+            description: Success
+          401:
+            description: Unauthorized
+          400:
+            description: Bad Request, found duplicate
         """
         data = request.get_json()
         result = SubscribeManager.insert_new(data)
@@ -40,9 +65,20 @@ class SubscribeFromIdRes(Resource):
     @auth.login_required
     def get(_id):
         """
-        usage:  curl 127.0.0.1:5000/subscription/14
-        :param _id: int
-        :return: json when id found else massage invalid id
+        Return card from given id
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        responses:
+          200:
+            description: Ok
+          401:
+            description: Not Found
         """
         res = SubsribeConcretManager.get_sub(_id)
         schema = SubscribeResponseSchema()
@@ -52,8 +88,24 @@ class SubscribeFromIdRes(Resource):
     @auth.login_required
     def put(self, _id):
         """
-        usage: curl 127.0.0.1:5000/subscription/2 -X PUT -H "Content-type:application/json" -d
-                                                    '{"card": "4321", "tar_type_id": 2, "all": "test"}'
+        Edit new card if found
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        - name: data
+          in: body
+        responses:
+          200:
+            description: OK
+          401:
+            description: Unauthorized
+          404:
+            description: Bad Request, found duplicate
         """
         data = request.get_json()
         schema = SubscribeResponseSchema()
@@ -64,7 +116,22 @@ class SubscribeFromIdRes(Resource):
     @auth.login_required
     def delete(_id):
         """
-        usage: curl 127.0.0.1:5000/subscription/21 -X DELETE
+        Delete card if found card with that id, else retrun Not found
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        responses:
+          200:
+            description: Ok
+          401:
+            description: Unauthorized
+          404:
+            description: Not found
         """
         return SubsribeConcretManager.delete_sub(_id)
 
@@ -73,7 +140,22 @@ class SubscriptionFromType(Resource):
     @staticmethod
     def get(_type):
         """
-        usage: curl 127.0.0.1:5000/subscription/type/2
+        Return cards from givent type
+        ---
+        tags:
+        - Card
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _type
+          in: path
+        responses:
+          200:
+            description: Ok
+          401:
+            description: Unauthorized
+          404:
+            description: Not found
         """
         schema = SubscribeResponseSchema()
         model_result = SubscribeShowFromTypeManager.get_all_from_type(_type)
