@@ -557,3 +557,282 @@ When card pay is True return:
     "message": "Card is already payed, not allow editing!"
 }
 </pre>
+<h2>Return all card in park who not payed</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request GET 'http://127.0.0.1:5000/parking' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>
+<pre>
+[
+{
+    "id": 86,
+    "income": "2021-12-10 13:50:25.898783",
+    "card": "A123"
+},
+{
+    "id": 87,
+    "income": "2021-12-10 13:50:31.327451",
+    "card": "A1234"
+}
+]
+</pre>
+<h2>Return info for concret parking id</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request GET 'http://127.0.0.1:5000/parking/detail/77' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+</h4>Response</h4>
+<pre>{
+"id": 77,
+"outcome": "2021-12-08 11:40:27.589098",
+"card": "12345",
+"otc_id": 4,
+"tarif_id": 2,
+"price": 1.0,
+"pay": true,
+"income": "2021-12-08 10:40:05.677984"
+}
+</pre>
+<h2>Delete card from park, if stay is less then 1 minute, required payment is still not payed</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request DELETE 'http://127.0.0.1:5000/parking/detail/84' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+</pre>
+<h4>Response</h4>
+<pre>
+204
+</pre>
+When bill already pay return
+<pre>404, Card is already payed, not allow editing!</pre>
+<h2>Edit card data, admin is required, need not pay too</h2>
+<h4>Request</h4>
+<pre>
+curl --location --request PUT 'http://127.0.0.1:5000/parking/detail/12' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{roken}}' \
+--data-raw '{
+    "card": "123456",
+    "otc_id": null,
+    "pay": true,
+    "tarif_id": 45,
+    "id": 12,
+    "income": "2021-11-01 12:39:19.151390",
+    "outcome": null,
+    "price": null
+}'
+</pre>
+When bill already pay return
+<pre>404, Card is already payed, not allow editing!</pre>
+
+<h2>Insert ot update card in park</h2>
+<p>If park not has not payed card, insert new one, else found id and update with outgoing time data and price</p>
+<h4>Request</h4>
+<pre>
+curl --location --request POST 'http://127.0.0.1:5000/parking' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}' \
+--data-raw '{
+    "card": "12345"
+}'
+</pre>
+<h4>Response</h4>
+<pre>
+When card stay is less then 1 minute return:
+This card stay less then 1 minute, you may want to delete record with id
+When not found card return: 
+This card not found on server, try with another
+When not enough free slot in park return:
+Not enough place
+When not valid data expired for card return:
+This card is nо longer valid
+</pre>
+When card is income insert
+<pre>
+{
+    "card": "12345",
+    "income": "2021-12-13 17:26:26.437234",
+    "id": 88
+}
+</pre>
+When card is outcome insert (update)
+<pre>
+{
+    "message": "Found",
+    "card": "12345",
+    "price": 1.0,
+    "id": 88
+}
+</pre>
+<h2>Paymnet</h2>
+<h4>Payment Request</h4>
+<pre>
+For cash
+curl --location --request POST 'http://127.0.0.1:5000/parking/85/cash' \
+--header 'Content-Type: application/json' \
+--data-raw ''
+With wise
+curl --location --request POST 'http://127.0.0.1:5000/parking/78/wise' \
+--header 'Content-Type: application/json' \
+--data-raw ''
+</pre>
+<h4>Response, result is write in table transaction, return</h4>
+<pre>"Success pay id: 88, sum: 1.00."</pre>
+<h2>Show Transactions, admin rights is required</h2>
+<h4>Request</h4>
+<pre>
+For all transacions
+curl --location --request GET 'http://127.0.0.1:5000/transactions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}'
+For concret transacion, found by id or transaction number, number get from wise payment
+curl --location --request GET 'http://127.0.0.1:5000/transaction?id=2' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{token}}' \
+--data-raw '{
+    "by trans_id": http://127.0.0.1:5000/transaction?trans_id=50320289
+    "by id": http://127.0.0.1:5000/transaction?id=2
+}'
+</pre>
+<h4>Response</h4>
+<pre>
+For all transaction
+[
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T12:46:47.913695",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320057,
+        "id": 2
+    },
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T12:51:10.905650",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320067,
+        "id": 3
+    },
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T12:53:31.490152",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320072,
+        "id": 4
+    },
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T13:02:41.123741",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320097,
+        "id": 5
+    },
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T13:51:51.300187",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320276,
+        "id": 6
+    },
+    {
+        "pay_type": 2,
+        "pr_id": 77,
+        "created_on": "2021-12-08T13:56:10.092252",
+        "payment_name": {
+            "name": "wise"
+        },
+        "transaction_id": 50320289,
+        "id": 7
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 78,
+        "created_on": "2021-12-08T14:17:15.982583",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 10
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 78,
+        "created_on": "2021-12-08T14:16:23.194071",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 9
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 83,
+        "created_on": "2021-12-10T13:51:23.390760",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 11
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 86,
+        "created_on": "2021-12-10T13:51:37.874737",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 12
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 85,
+        "created_on": "2021-12-10T13:53:39.151693",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 13
+    },
+    {
+        "pay_type": 1,
+        "pr_id": 88,
+        "created_on": "2021-12-13T17:33:05.919786",
+        "payment_name": {
+            "name": "cash"
+        },
+        "transaction_id": -2,
+        "id": 14
+    }
+]
+<p>For concret id or transaction id
+{
+    "pay_type": 2,
+    "pr_id": 77,
+    "created_on": "2021-12-08T12:51:10.905650",
+    "payment_name": {
+        "name": "wise"
+    },
+    "transaction_id": 50320067,
+    "id": 3
+}
+</pre>
