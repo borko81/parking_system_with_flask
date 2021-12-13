@@ -1,13 +1,19 @@
-# parking_system_with_flask
+# Parking_system_with_flask
 
-Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The authorized users have access to the basic data about the parking lot, such as free places and prices for stays
+Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The unauthorized users have access to the basic data about the parking lot, such as free places and prices for stays
 
-<h1>Swagger url</h1>
+<h1 >Swagger url</h1>
 <pre>http://127.0.0.1:5000/apidocs/</pre>
 
+<h1>Up and running</h1>
+<p>
+Insert needed modules with command: python -m pip install -r requirements.txt.
+Аpi running with command: flask run or python app.py.
+To work with api, needed to register new user, two privileg: admin and staff When new user register is sending email to owner with this information. Insert or update new tarif plan, then add price for stay. Subscribe model has two type:
+common and vip, everyone should have their own prices for stays write in table tar_el. Subscribe there may or may not be a photo uploaded to the car, the photo is kept in cloudinary. The card is entered according to whether the previous stay has already been paid or not is re-entered with status input or the measured result is updated with status output, adding a price for the estimated stay. Upon exit, the amount can be paid in cash or through wise. The day ends with a report keeping the data on the paid bills
+</p>
 <h1>URL Documentation</h1>
-
-<h1>User Resourse</h1>
+<h2>User Resourse</h2>
 <h2>Add new User</h2>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/user/register -X POST -H "Content-Type:application/json" -d '{"name": "Name G Name", "password": "A123", "type":"admin"}</pre>
