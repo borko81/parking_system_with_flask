@@ -457,7 +457,7 @@ Valid data:
     }
 ]
 </pre>
-<h2>Insert new card in park</h2>
+<h2>Adds a new card in the parking lot, if the card is already there and has not been paid yet, the information with the financial part is updated</h2>
 <h4>Request</h4>
 <pre>
 curl --location --request POST 'http://127.0.0.1:5000/parking' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{"card": "123456"}'
