@@ -483,6 +483,19 @@ When card has expired time return
     "message": "This card is nо longer valid"
 }
 </pre>
+When card found ot parking and card not payment yet return
+<pre>
+{
+    "message": "Card found",
+    "card": "12345",
+    "price": 1.0,
+    "id": 91,
+    "income": "2021-12-16 13:11:26.890717",
+    "outcome": "2021-12-16 13:24:49.351589",
+    "cart_type_id": "2",
+    "cart_type_name": "Common"
+}
+</pre>
 <h2>Return Parking Detail Only Admin allowed to do that</h2>
 <h4>Request</h4>
 <pre>
