@@ -432,7 +432,7 @@ When not found that type_id return
 []
 </pre>
 <h1>Parking system</h1>
-<h2><Return all not already payed card in park</h2>
+<h2>Returns all cards that are still in the parking lot and have not paid</h2>
 <h4>Request</h4>
 <pre>
 curl --location --request GET 'http://127.0.0.1:5000/parking' --header 'Authorization: Bearer {{token}}'
