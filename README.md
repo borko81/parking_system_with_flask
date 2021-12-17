@@ -5,6 +5,20 @@ Complete management system of a parking company. Works on a central server on th
 <h1 >Swagger url</h1>
 <pre>http://127.0.0.1:5000/apidocs/</pre>
 
+<h1>Run database migrations</h1>
+<h4>Let's run the database migrations:</h4>
+<pre>
+flask db init
+</pre>
+<h4>Migrate</h4>
+<pre>
+falsk  db migrate
+</pre>
+<h4>Upgrade</h4>
+<pre>
+falsk  db upgrade
+</pre>
+
 <h1>Up and running</h1>
 <p>
 Insert needed modules with command: python -m pip install -r requirements.txt.
@@ -12,6 +26,11 @@ Insert needed modules with command: python -m pip install -r requirements.txt.
 To work with api, needed to register new user, two privileg: admin and staff When new user register is sending email to owner with this information. Insert or update new tarif plan, then add price for stay. Subscribe model has two type:
 common and vip, everyone should have their own prices for stays write in table tar_el. Subscribe there may or may not be a photo uploaded to the car, the photo is kept in cloudinary. The card is entered according to whether the previous stay has already been paid or not is re-entered with status input or the measured result is updated with status output, adding a price for the estimated stay. Upon exit, the amount can be paid in cash or through wise. The day ends with a report keeping the data on the paid bills
 </p>
+<h4>Run server</h4>
+<pre>
+flask run
+</pre>
+
 <h1>URL Documentation</h1>
 <h2>User Resourse</h2>
 <h2>Add new User</h2>
