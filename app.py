@@ -10,9 +10,10 @@ from werkzeug.exceptions import BadRequest
 from db import db
 from helpers.loger_config import custom_logger
 from resources.routers import routers
+from config import create_app
 
-app = Flask(__name__)
-app.config.from_object("config.DevelopmentConfig")
+
+app = create_app()
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
@@ -20,6 +21,12 @@ api = Api(app)
 migrate = Migrate(app, db, compare_type=True)
 db.init_app(app)
 swagger = Swagger(app)
+
+
+@app.before_first_request
+def create_tables():
+    db.init_app(app)
+    db.create_all()
 
 
 @app.before_first_request
@@ -51,7 +58,7 @@ def test_is_alive():
     return {"message": "Server still alive"}
 
 
-[api.add_resource(*route) for route in routers]
+
 
 if __name__ == "__main__":
     app.run()

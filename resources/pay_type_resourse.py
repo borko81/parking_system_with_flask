@@ -14,9 +14,9 @@ class PayTypeResourse(Resource):
     def get(self):
         return PayTypeManager.get_all()
 
-    @validate_schema(PayTypeRequest)
     @auth.login_required
     @permission_required(UserType.admin)
+    @validate_schema(PayTypeRequest)
     def post(self):
         data = request.get_json()
         return PayTypeManager.insert_new(data)

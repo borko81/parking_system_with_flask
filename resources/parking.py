@@ -15,15 +15,45 @@ class ParkingRes(Resource):
     @auth.login_required
     def get(self):
         """
-        Show all car in parking who is not payed yet
-        usage: curl 127.0.0.1:5000/parking
+        Returns all cards that are still in the parking lot and have not paid
+        ---
+        tags:
+        - Park
+        parameters:
+        - name: Authorization
+          in: header
+        responses:
+          200:
+            description: Ok
+          401:
+            description: Unauthorized
         """
         return ParkingManager.show_car_in_park()
 
-    @validate_schema(ParkEnterSchema)
     @auth.login_required
+    @validate_schema(ParkEnterSchema)
     def post(self):
-        """Here is a too big black magic"""
+        """
+        Adds a new card in the parking lot, if the card is already there
+        and has not been paid yet, the information with the financial part is updated
+        ---
+        tags:
+        - Park
+        parameters:
+        - name: Authorization
+          in: header
+        - name: data
+          in: body
+        responses:
+          201:
+            description: success
+          200:
+            description: ok
+          401:
+            description: Unauthorized
+          400:
+            description: This card stay less then 1 minute
+        """
         data = request.get_json()
         return ParkingManager.input_new_car_in_park(data)
 
@@ -31,25 +61,81 @@ class ParkingRes(Resource):
 class ParkingDetailInfoRes(Resource):
     @staticmethod
     def return_result_in_json_use_schema(result):
+        """Validate result to json (helper module)"""
         schema = park_res_schema()
         return schema.dump(result.first())
 
     @auth.login_required
-    @permission_required(UserType.admin)
     def get(self, _id):
+        """
+        Return information for card by parking id
+        ---
+        tags:
+        - Park
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        responses:
+          200:
+            description: ok
+          401:
+            description: Unauthorized
+          404:
+            description: Not Found
+        """
         result = ParkingDetailFromIdManager.get_from_id(_id)
         return ParkingDetailInfoRes.return_result_in_json_use_schema(result)
 
-    @validate_schema(ParkRequestSchemaForEdit)
     @auth.login_required
     @permission_required(UserType.admin)
+    @validate_schema(ParkRequestSchemaForEdit)
     def put(self, _id):
+        """
+        If card found in park and card not already is payed, may edit some information.
+        Edint allowed only with admin rights.
+        ---
+        tags:
+        - Park
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        - name: data
+          in: body
+        responses:
+          200:
+            description: ok
+          401:
+            description: Unauthorized
+        """
         data = request.get_json()
         result = ParkingDetailFromIdManager.edit_car_in_park(_id, data)
         return self.return_result_in_json_use_schema(result)
 
     @auth.login_required
     def delete(self, _id):
+        """
+        if found in park card with this id, may delete only from admin user
+        and only if card not already is payed
+        ---
+        tags:
+        - Park
+        parameters:
+        - name: Authorization
+          in: header
+        - name: _id
+          in: path
+        responses:
+          204:
+            description: ok
+          401:
+            description: Unauthorized
+          404:
+            description: Not Found
+        """
         return ParkingDetailFromIdManager.delete_car_in_park(_id)
 
 

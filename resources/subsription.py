@@ -34,8 +34,8 @@ class SubscriptionRes(Resource):
         schema = SubscribeResponseSchema()
         return schema.dump(result, many=True)
 
-    @validate_schema(SubscribeResquestSchema)
     @auth.login_required
+    @validate_schema(SubscribeResquestSchema)
     def post(self):
         """
         Insert new card
@@ -84,8 +84,8 @@ class SubscribeFromIdRes(Resource):
         schema = SubscribeResponseSchema()
         return schema.dump(res.first())
 
-    @validate_schema(SubscribeForEditSchema)
     @auth.login_required
+    @validate_schema(SubscribeForEditSchema)
     def put(self, _id):
         """
         Edit new card if found

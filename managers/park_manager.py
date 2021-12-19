@@ -8,6 +8,7 @@ from managers.park_capacity_manager import ParkCapacityManager
 from models.park import ParkModel
 from models.subscription import SubscriptionModel
 from models.tarif_el import TarifPiceModel
+from models.tarif_type import TariffTypeModel
 from schemas.parking_schemas import ParkResponseSchema
 
 today = datetime.now()
@@ -127,14 +128,18 @@ class ParkingManager:
             car.tarif_id = card.tar_type_id
             schema = ParkResponseSchema()
             data_preparate_for_commit(car)
-            return schema.dump(car)
+            return schema.dump(car), 201
         else:
             # TODO Think to delete card if stay is less then 1 minute
-            id_for_stay = test_car_already_in_park.first().id
+            id_for_stay = test_car_already_in_park.first()
             price = total_update_car_end_time_and_tax(test_car_already_in_park)
             return {
-                "message": "Found",
+                "message": "Card found",
                 "card": data["card"],
                 "price": price,
-                "id": id_for_stay,
+                "id": id_for_stay.id,
+                "income": str(id_for_stay.income),
+                "outcome": str(id_for_stay.outcome),
+                "cart_type_id": id_for_stay.tarif_id,
+                "cart_type_name": str(TariffTypeModel.find_by_id(id_for_stay.tarif_id).first().name)
             }

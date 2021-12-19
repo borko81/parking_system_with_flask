@@ -22,9 +22,9 @@ class SubscribeManager:
         """
         validate_data(data)
         if "photo_url" in data:
-            photo = upload_picture_to_cloudinary(data["photo_url"])
-            if photo:
-                data["photo_url"] = photo
+            photo_path = upload_picture_to_cloudinary(data["photo_url"])
+            if photo_path:
+                data["photo_url"] = photo_path
         insert_in_model = SubscriptionModel(**data)
         db.session.add(insert_in_model)
         db.session.flush()

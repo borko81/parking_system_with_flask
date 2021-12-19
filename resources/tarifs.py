@@ -30,9 +30,9 @@ class TarifAllRes(Resource):
         data = TarifAllManager.get_all_tarif()
         return {"all_tarife": data}, 200
 
-    @validate_schema(TartifRequestSchema)
     @auth.login_required
     @permission_required(UserType.admin)
+    @validate_schema(TartifRequestSchema)
     def post(self):
         """
         Post new tarife
@@ -69,9 +69,9 @@ class TarifPricesRes(Resource):
         """
         return TarifPricesManager.get_all_tarife_prices()
 
-    @validate_schema(TarifPriceRequestSchema)
     @auth.login_required
     @permission_required(UserType.admin)
+    @validate_schema(TarifPriceRequestSchema)
     def post(self):
         """
         Post new price

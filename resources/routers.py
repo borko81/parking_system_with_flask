@@ -1,4 +1,5 @@
 from resources.generate_otc import GenerateOtcResourse, ShowOtcDetail
+from resources.document_resourse import DocumentResourse
 from resources.parking import (
     ParkingRes,
     ParkingPayRes,
@@ -32,6 +33,7 @@ from resources.user_resource import (
 )
 
 routers = (
+    (DocumentResourse, "/documents"),
     (ForUsersParkingInfo, "/parking_info"),
     (UserRegisterRes, "/user/register"),
     (ReturnAllUsersRes, "/users"),

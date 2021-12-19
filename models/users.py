@@ -2,8 +2,8 @@ from decouple import config
 from sqlalchemy import func
 
 from db import db
-from models.enum import UserType
 from helpers.striped_fields_in_model import StrippedString
+from models.enum import UserType
 
 
 class UserModel(db.Model):

@@ -1,5 +1,6 @@
 from flask_restful import Resource
 
+from managers.auth import auth
 from managers.pay_manager import PayWiseManager, PayCashManager
 
 mapper = {
@@ -9,6 +10,7 @@ mapper = {
 
 
 class PayResourse(Resource):
+    @auth.login_required
     def post(self, _id, pay):
         result = mapper[pay](_id)
         return result
