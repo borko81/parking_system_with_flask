@@ -5,6 +5,20 @@ Complete management system of a parking company. Works on a central server on th
 <h1 >Swagger url</h1>
 <pre>http://127.0.0.1:5000/apidocs/</pre>
 
+<h1>Run database migrations</h1>
+<h4>Let's run the database migrations:</h4>
+<pre>
+flask db init
+</pre>
+<h4>Migrate</h4>
+<pre>
+falsk  db migrate
+</pre>
+<h4>Upgrade</h4>
+<pre>
+falsk  db upgrade
+</pre>
+
 <h1>Up and running</h1>
 <p>
 Insert needed modules with command: python -m pip install -r requirements.txt.
@@ -12,6 +26,11 @@ Insert needed modules with command: python -m pip install -r requirements.txt.
 To work with api, needed to register new user, two privileg: admin and staff When new user register is sending email to owner with this information. Insert or update new tarif plan, then add price for stay. Subscribe model has two type:
 common and vip, everyone should have their own prices for stays write in table tar_el. Subscribe there may or may not be a photo uploaded to the car, the photo is kept in cloudinary. The card is entered according to whether the previous stay has already been paid or not is re-entered with status input or the measured result is updated with status output, adding a price for the estimated stay. Upon exit, the amount can be paid in cash or through wise. The day ends with a report keeping the data on the paid bills
 </p>
+<h4>Run server</h4>
+<pre>
+flask run
+</pre>
+
 <h1>URL Documentation</h1>
 <h2>User Resourse</h2>
 <h2>Add new User</h2>
@@ -432,7 +451,7 @@ When not found that type_id return
 []
 </pre>
 <h1>Parking system</h1>
-<h2><Return all not already payed card in park</h2>
+<h2>Returns all cards that are still in the parking lot and have not paid</h2>
 <h4>Request</h4>
 <pre>
 curl --location --request GET 'http://127.0.0.1:5000/parking' --header 'Authorization: Bearer {{token}}'
@@ -457,7 +476,7 @@ Valid data:
     }
 ]
 </pre>
-<h2>Insert new card in park</h2>
+<h2>Adds a new card in the parking lot, if the card is already there and has not been paid yet, the information with the financial part is updated</h2>
 <h4>Request</h4>
 <pre>
 curl --location --request POST 'http://127.0.0.1:5000/parking' --header 'Content-Type: application/json' --header 'Authorization: Bearer {{token}}' --data-raw '{"card": "123456"}'
@@ -481,6 +500,19 @@ When not enough free space return
 When card has expired time return
 {
     "message": "This card is nо longer valid"
+}
+</pre>
+When card found ot parking and card not payment yet return
+<pre>
+{
+    "message": "Card found",
+    "card": "12345",
+    "price": 1.0,
+    "id": 91,
+    "income": "2021-12-16 13:11:26.890717",
+    "outcome": "2021-12-16 13:24:49.351589",
+    "cart_type_id": "2",
+    "cart_type_name": "Common"
 }
 </pre>
 <h2>Return Parking Detail Only Admin allowed to do that</h2>
