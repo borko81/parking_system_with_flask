@@ -24,7 +24,7 @@ class UserRegisterRes(Resource):
         :return: json
         """
         data = request.get_json()
-        return UserRegisterManager.insert_new_name(data)
+        return UserRegisterManager.insert_new_name(data), 201
 
 
 class ReturnAllUsersRes(Resource):
@@ -181,4 +181,4 @@ class UserControlRes(Resource):
           401:
             description: Unauthorized
         """
-        return UserDetailManager.delete_user(_id)
+        return UserDetailManager.delete_user(_id), 204

@@ -9,3 +9,4 @@ class BaseSubscribeRequestSchema(Schema):
     active_date_from = fields.String(required=False)
     active_date_to = fields.String(required=False)
     photo_url = fields.String(required=False)
+    photo_ext = fields.String(required=False)

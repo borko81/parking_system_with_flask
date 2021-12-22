@@ -14,7 +14,6 @@ class DocumentResourse(Resource):
     def get(self):
         return DocumentManaagers.get_doc()
 
-
     @auth.login_required
     @permission_required(UserType.admin)
     @validate_schema(DocRequest)

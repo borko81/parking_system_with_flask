@@ -58,7 +58,5 @@ def test_is_alive():
     return {"message": "Server still alive"}
 
 
-
-
 if __name__ == "__main__":
     app.run()

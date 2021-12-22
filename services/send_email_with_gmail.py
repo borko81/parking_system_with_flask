@@ -3,14 +3,14 @@ import smtplib
 from decouple import config
 
 
-def send_email_notification(user_info):
+def send_email_notification(message):
     gmail_user = config("GMAIL_ADDRESS")
     gmail_password = config("GMAIL_PASSWORD")
 
     sent_from = "Parking api"
     to = [gmail_user]
     subject = "Super Important Message, new user was register"
-    body = "Hey, new user with name: {} was register ".format(user_info)
+    body = f"{message}"
 
     email_text = """\
     From: %s

@@ -1,6 +1,11 @@
+import os
+import uuid
+
 from werkzeug.exceptions import BadRequest, NotFound
 
+from constants import TEMP_FILE_FOLDER
 from db import db
+from helpers.decode_document import decode_file
 from models.subscription import SubscriptionModel
 from services.cloudinary_upload import upload_picture_to_cloudinary
 
@@ -21,10 +26,21 @@ class SubscribeManager:
         :return:
         """
         validate_data(data)
-        if "photo_url" in data:
-            photo_path = upload_picture_to_cloudinary(data["photo_url"])
-            if photo_path:
-                data["photo_url"] = photo_path
+
+        if "photo_url" in data and "photo_ext" in data:
+            extension = data["photo_ext"]
+            name = f"{str(uuid.uuid4())}.{extension}"
+            path = os.path.join(TEMP_FILE_FOLDER, f"{name}")
+            try:
+                decode_file(path, data["photo_url"])
+                photo_path = upload_picture_to_cloudinary(path)
+                if photo_path:
+                    data["photo_url"] = photo_path
+            except Exception:
+                raise BadRequest("Error with processing")
+            finally:
+                os.remove(path)
+
         insert_in_model = SubscriptionModel(**data)
         db.session.add(insert_in_model)
         db.session.flush()

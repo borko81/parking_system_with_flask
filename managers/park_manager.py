@@ -141,5 +141,7 @@ class ParkingManager:
                 "income": str(id_for_stay.income),
                 "outcome": str(id_for_stay.outcome),
                 "cart_type_id": id_for_stay.tarif_id,
-                "cart_type_name": str(TariffTypeModel.find_by_id(id_for_stay.tarif_id).first().name)
+                "cart_type_name": str(
+                    TariffTypeModel.find_by_id(id_for_stay.tarif_id).first().name
+                ),
             }

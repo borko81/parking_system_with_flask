@@ -1,5 +1,5 @@
-from resources.generate_otc import GenerateOtcResourse, ShowOtcDetail
 from resources.document_resourse import DocumentResourse
+from resources.generate_otc import GenerateOtcResourse, ShowOtcDetail
 from resources.parking import (
     ParkingRes,
     ParkingPayRes,

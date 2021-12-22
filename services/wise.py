@@ -1,8 +1,8 @@
 import json
 import uuid
-from decouple import config
 
 import requests
+from decouple import config
 from werkzeug.exceptions import InternalServerError
 
 
@@ -31,14 +31,13 @@ class WiseService:
         url = self.main_url + "/v2/quotes"
         data = {
             "sourceCurrency": "BGN",
-            "targetCurrency": "EUR",
+            "targetCurrency": "BGN",
             "targetAmount": amount,
             "profile": self.profile_id,
         }
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
 
         if resp.status_code == 200:
-            # print(resp.json())
             resp = resp.json()
             return resp["id"]
         else:
@@ -62,11 +61,11 @@ class WiseService:
             return resp["id"]
         else:
             print(resp)
-            raise ValueError("Error in stage 2 recepient")
+            raise ValueError("Error in stage 3 recepient")
 
     def create_transfer(self, target_account_id, quote_id):
         customer_transaction_id = str(uuid.uuid4())
-        url = self.main_url + "/v1/transfers"
+        url = f"{self.main_url}/v1/transfers"
         data = {
             "targetAccount": target_account_id,
             "quoteUuid": quote_id,
@@ -75,12 +74,14 @@ class WiseService:
         }
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
 
-        if resp.status_code == 200:
+        if resp.status_code in [200, 201]:
             resp = resp.json()
             return resp["id"]
         else:
             print(resp)
-            raise ValueError("Error in stage 3")
+            raise InternalServerError(
+                "Payment provider is not available at the moment, error in stage 4"
+            )
 
     def fund_transfer(self, transfer_id):
         url = f"{self.main_url}/v3/profiles/{self.profile_id}/transfers/{transfer_id}/payments"

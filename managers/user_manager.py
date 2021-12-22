@@ -5,11 +5,13 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 from helpers.data_preparation import data_preparate_for_commit
 from helpers.decorator import validate_schema
+from helpers.loger_config import custom_logger
 from managers.auth import AuthManager
 from models.users import UserModel
 from schemas.request.user_request_schema import UserRegisterSchema
 from schemas.response.user_response_schema import UserResponceSchema
-from services.send_email_with_gmail import send_email_notification
+from services.amazon_ses_services import SeSEmail
+import json
 
 
 class UserRegisterManager(Resource):
@@ -21,8 +23,12 @@ class UserRegisterManager(Resource):
             data["password"] = generate_password_hash(data["password"])
             user = UserModel(**data)
             data_preparate_for_commit(user)
-            send_email_notification(data["name"])
+            SeSEmail().send_email(f"User with name: {data['name']} was created")
             return schema.dump(user)
+        custom_logger(
+            "error",
+            f"Function insert_new_name: Try to tegister with not unique name ({data['name']})",
+        )
         raise BadRequest("Invalid data, try again")
 
 
@@ -38,6 +44,7 @@ class UserDetailManager(Resource):
         user = UserModel.find_from_id(_id)
         if user.first() is not None:
             return user
+        custom_logger("error", f"Function get_user: not found user with id {_id}")
         raise NotFound("Invalid id {}".format(_id))
 
     @staticmethod
@@ -61,6 +68,7 @@ class UserDetailManager(Resource):
     def delete_user(_id):
         user = UserDetailManager.get_user(_id)
         db.session.delete(user.first())
+        custom_logger("info", f"Function delete_user: delete user with id {_id}")
         return 204
 
 

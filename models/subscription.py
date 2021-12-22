@@ -17,7 +17,8 @@ class SubscriptionModel(db.Model):
     tar_type_id = db.Column(db.Integer, db.ForeignKey("tariftype.id"), nullable=False)
     active_date_from = db.Column(db.DateTime, nullable=False, default=datetime.now())
     active_date_to = db.Column(db.DateTime, nullable=True, default=None)
-    photo_url = db.Column(db.String(255), nullable=True)
+    photo_url = db.Column(db.Text, nullable=True)
+    photo_ext = db.Column(db.String, nullable=True)
 
     @classmethod
     def get_from_card(cls, user_card):

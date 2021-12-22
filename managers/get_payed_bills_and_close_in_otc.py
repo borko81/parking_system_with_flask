@@ -1,10 +1,43 @@
+import json
+
+from flask_restful import abort
 from werkzeug.exceptions import BadRequest, NotFound
 
 from helpers.data_preparation import data_preparate_for_commit
+from helpers.loger_config import custom_logger
 from managers.auth import auth
+from models import Transaction, UserModel
 from models.otc_model import OtcModel
 from models.park import ParkModel
 from schemas.response.otc_info_schema import OtcInfoSchema
+from services.send_email_with_gmail import send_email_notification
+
+
+def get_sum_for_otc_send_email(_id):
+    analysis_data = OtcModel.query.filter_by(id=_id).first()
+    data = {
+        "Data For": str(analysis_data.created_on),
+        "User": UserModel.find_from_id(analysis_data.user_id).first().name,
+        "Cash": sum(
+            [
+                float(i.price)
+                for i in analysis_data.park_otc
+                if Transaction.query.filter_by(pr_id=i.id).first().pay_type == 1
+            ]
+        ),
+        "Wise": sum(
+            [
+                float(i.price)
+                for i in analysis_data.park_otc
+                if Transaction.query.filter_by(pr_id=i.id).first().pay_type == 2
+            ]
+        ),
+    }
+    try:
+        send_email_notification(json.dumps(data))
+        custom_logger("info", "Successfully send email with otc data")
+    except Exception:
+        abort(400)
 
 
 class GenerateOTCManager:
@@ -33,7 +66,12 @@ class GenerateOTCManager:
                 r.otc_id = otc_id
         except:
             raise BadRequest("Unexpected problem acquire")
-        return {"message": "Success", "otc_id": otc_id}
+        try:
+            get_sum_for_otc_send_email(otc_id)
+        except Exception:
+            pass
+        finally:
+            return {"message": "Success", "otc_id": otc_id}
 
 
 class GetDetailForOtcManager:

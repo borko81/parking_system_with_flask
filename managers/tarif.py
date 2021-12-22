@@ -1,10 +1,9 @@
 from werkzeug.exceptions import BadRequest
 
-from db import db
-from models.tarif_type import TariffTypeModel
-from models.enum import TarifTypeEnum
-from schemas.response.tarif import TartifResponseSchema
 from helpers.data_preparation import data_preparate_for_commit
+from models.enum import TarifTypeEnum
+from models.tarif_type import TariffTypeModel
+from schemas.response.tarif import TartifResponseSchema
 
 
 class TarifAllManager:
