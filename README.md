@@ -1,9 +1,23 @@
 # Parking_system_with_flask
 
 Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The unauthorized users have access to the basic data about the parking lot, such as free places and prices for stays
+System use implementation with: cloudinary, weatherinfo, wise and aws S3 and SES. Also use smtplib with google acc.
 
 <h1 >Swagger url</h1>
 <pre>http://127.0.0.1:5000/apidocs/</pre>
+
+<h1>Download, configure and install requarements</h1>
+<pre>
+Clone the repo:
+git clone https://github.com/borko81/parking_system_with_flask.git
+</pre>
+<h4>After cloning, create a virtual environment and install the requirements.</h4>
+<pre>
+cd parking_system_with_flask
+python -m venv parking_system_with_flask
+source venv/Script/activate
+pip install -r requirements.txt
+</pre>
 
 <h1>Run database migrations</h1>
 <h4>Let's run the database migrations:</h4>
@@ -12,12 +26,15 @@ flask db init
 </pre>
 <h4>Migrate</h4>
 <pre>
-falsk  db migrate
+flask  db migrate
 </pre>
 <h4>Upgrade</h4>
 <pre>
-falsk  db upgrade
+flask  db upgrade
 </pre>
+
+<h1>Testing</h1>
+<pre>pytest</pre>
 
 <h1>Up and running</h1>
 <p>
