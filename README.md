@@ -1,9 +1,23 @@
 # Parking_system_with_flask
 
 Complete management system of a parking company. Works on a central server on the Internet with a database for all modules. Access to the server is restricted to authorized users only. The unauthorized users have access to the basic data about the parking lot, such as free places and prices for stays
+System use implementation with: cloudinary, weatherinfo, wise and aws S3 and SES. Also use smtplib with google acc.
 
 <h1 >Swagger url</h1>
 <pre>http://127.0.0.1:5000/apidocs/</pre>
+
+<h1>Download, configure and install requarements</h1>
+<pre>
+Clone the repo:
+git clone https://github.com/borko81/parking_system_with_flask.git
+</pre>
+<h4>After cloning, create a virtual environment and install the requirements.</h4>
+<pre>
+cd parking_system_with_flask
+python -m venv parking_system_with_flask
+source venv/Script/activate
+pip install -r requirements.txt
+</pre>
 
 <h1>Run database migrations</h1>
 <h4>Let's run the database migrations:</h4>
@@ -12,12 +26,15 @@ flask db init
 </pre>
 <h4>Migrate</h4>
 <pre>
-falsk  db migrate
+flask  db migrate
 </pre>
 <h4>Upgrade</h4>
 <pre>
-falsk  db upgrade
+flask  db upgrade
 </pre>
+
+<h1>Testing</h1>
+<pre>pytest</pre>
 
 <h1>Up and running</h1>
 <p>
@@ -34,6 +51,7 @@ flask run
 <h1>URL Documentation</h1>
 <h2>User Resourse</h2>
 <h2>Add new User</h2>
+<p>requires administrator rights: /user/register</p>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/user/register -X POST -H "Content-Type:application/json" -d '{"name": "Name G Name", "password": "A123", "type":"admin"}</pre>
 <h4>Response</h4>
@@ -50,6 +68,7 @@ When unvalid data
 }
 </pre>
 <h2>Return all Users</h2>
+<p>requires login: /users</p>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/users -H "Content-Type:application/json" -H "Authorization: Bearer{{token}}"</pre>
 <h4>Response</h4>
@@ -78,9 +97,9 @@ When unvalid data
 }
 </pre>
 <h2>Update User</h2>
+<p>requires administrator rights: /user/<int:_id></p>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/user/9 -X PUT -H "Content-Type:application/json" -H "Authorization: Bearer {{token}}" -d '{"name": "N N N"}'</pre>
-<pre>curl 127.0.0.1:5000/user/9 -X PATCH -H "Content-Type:application/json" -H "Authorization: Bearer {{token}}" -d '{"name": "N N N"}'</pre>
 <h4>Response</h4>
 <pre>
 When valid data
@@ -95,6 +114,7 @@ When unvalid data
 }
 </pre>
 <h2>Delete User</h2>
+<p>requires administrator rights: /user/<int:_id></p>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/user/9 -X DELETE -H "Content-Type:application/json" -H "Authorization: Bearer {{token}}"</pre>
 <h4>Response</h4>
@@ -108,6 +128,7 @@ When unvalid data
 </pre>
 <h1>Tarif Plan</h1>
 <h2>Return all tarif's</h2>
+<p>requires login: /tarif</p>
 <h4>Request</h4>
 <pre>curl 127.0.0.1:5000/tarif -X GET -H 'Content-Type:application/json' -H 'Authorization: Bearer {{token}}'</pre>
 <h4>Response</h4>
@@ -154,7 +175,7 @@ When try to add same name (unique only)
 </pre>
 <h1>Tarif Prices</h1>
 <h2>Show all prices</h2>
-<h4>Request</h4>
+<h4>Request: /tarif/price</h4>
 <pre>curl 127.0.0.1:5000/tarif/price</pre>
 <h4>Response</h4>
 <pre>
@@ -177,7 +198,8 @@ When try to add same name (unique only)
 ]
 </pre>
 <h2>Add new price</h2>
-<h4>Request</h4>
+<p>requires administrator rights</p>
+<h4>Request: /tarif/price</h4>
 <pre>curl 127.0.0.1:5000/tarif/price -X POST -H "Content-Type:application/json" -d '{"tarif_id": 2, "stay":"00:01", "price":1}' -H 'Authorization: Bearer {{token}}</pre>
 <h4>Response</h4>
 <pre>
@@ -204,7 +226,8 @@ When id is not valid
 }
 </pre>
 <h2>Edit price from concret id</h2>
-<h4>Request only admin do that</h4>
+<p>requires administrator rights</p>
+<h4>Request: /tarif/price/<int:_id></h4>
 <pre>curl 127.0.0.1:5000/tarif/price/2 -X PUT -H "Content-Type:application/json" -d '{"price": 20} -H 'Authorization: Bearer {{token}}</pre>
 <h4>Response</h4>
 <pre>
@@ -220,7 +243,8 @@ When id is not valid
 }
 </pre>
 <h2>Delete price from concret id</h2>
-<h4>Request only admin do that</h4>
+<p>requires administrator rights</p>
+<h4>Request: /tarif/price/<int:_id></h4>
 <pre>curl 127.0.0.1:5000/tarif/price/2 -X DELETE -H "Content-Type:application/json" -H 'Authorization: Bearer {{token}}</pre>
 <h4>Response</h4>
 <pre>
@@ -236,7 +260,7 @@ When id is not valid
 }
 </pre>
 <h2>Return prices only for input type</h2>
-<h4>Request all do that</h4>
+<h4>Request: /tarif/type/<string:name></h4>
 <pre>curl 127.0.0.1:5000/tarif/type/vip</pre>
 <h4>Response</h4>
 <pre>
@@ -255,14 +279,15 @@ When type is not valid
 </pre>
 <h1>Parking capacity Use for check has or not any free slot to enter new car in parking</h1>
 <h2>Return free slot in parking</h2>
-<h4>Request all do that</h4>
+<h4>Request: /parking/capacity</h4>
 <pre>curl 127.0.0.1:5000/parking/capacity</pre>
 <h4>Response</h4>
 <pre>
 5
 </pre>
 <h2>Post new value (only first record I get!)</h2>
-<h4>Request only admin do that</h4>
+<p>requires administrator rights</p>
+<h4>Request: /parking/capacity</h4>
 <pre>curl 127.0.0.1:5000/parking/capacity -X POST -H "Content-Type:application/json" -H 'Authorization: Bearer {{token}} -d '{"capacity": 25}'</pre>
 <h4>Response</h4>
 <pre>
