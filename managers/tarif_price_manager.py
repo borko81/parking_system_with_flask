@@ -1,15 +1,22 @@
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, BadRequest
 
 from db import db
 from helpers.data_preparation import data_preparate_for_commit
+from helpers.loger_config import custom_logger
+from models import TariffTypeModel
 from models.tarif_el import TarifPiceModel
-from models.tarif_type import TariffTypeModel
 from schemas.request.tarif_price import TarifPriceRequestSchema, PriceForConcretTarType
 
 
 class TarifPricesManager:
     @staticmethod
     def input_new_price(data):
+        if not TariffTypeModel.query.filter_by(id=data["tarif_id"]).first():
+            custom_logger(
+                "error",
+                f"Function input_new_price: try to insert data with invalid type_id: {data['tarif_id']}",
+            )
+            raise BadRequest("This type is not valid")
         schema = TarifPriceRequestSchema()
         result = TarifPiceModel(**data)
         data_preparate_for_commit(result)
@@ -40,6 +47,10 @@ class TarifPriceFromConcretTypeManager:
     def delete_result(_id):
         price = TarifPriceFromConcretTypeManager.get_result(_id)
         db.session.delete(price.first())
+        custom_logger(
+            "error",
+            f"Function delete_result: delete price with id {_id}",
+        )
         return 204
 
 

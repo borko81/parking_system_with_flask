@@ -94,7 +94,7 @@ class TarifPricesRes(Resource):
                 description: Unauthorized
         """
         data = request.get_json()
-        return TarifPricesManager.input_new_price(data)
+        return TarifPricesManager.input_new_price(data), 201
 
 
 class TarifConcretRes(Resource):

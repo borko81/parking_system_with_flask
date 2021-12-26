@@ -50,6 +50,7 @@ class TestCapacity(TestCase):
 
     def test_insert_new_capacity_when_have_valid_token_and_have_valid_data(self):
 
+        url_with_free_park_slot = "/parking_info"
         headers = {
             "Authorization": f"Bearer {self.token}",
             "content-type": "application/json",
@@ -59,6 +60,13 @@ class TestCapacity(TestCase):
         )
         assert response.status_code, 201
         assert json.loads(response.data)["message"] == "Success insert parking capacity"
+
+        # Continue test to show correct information to user, without weather,
+        # this information has stopped by app configuration
+
+        response = self.client.get(url_with_free_park_slot)
+        assert response.status_code == 200
+        assert response.json['Free Park Slot'] == 100
 
     def test_delete_capacity_when_have_already_row(self):
         headers = {

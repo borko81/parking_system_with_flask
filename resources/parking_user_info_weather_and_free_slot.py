@@ -18,8 +18,12 @@ class ForUsersParkingInfo(Resource):
             description: OK
         """
         parking_slot = ParkingCapacityRes.get()
-        weather = WeatherInfo.get()
-        data = {"Free Park Slot": parking_slot, "Weather": weather}
+        # Paused to check flask wun in testing mod if not true, load weather info
+        if not 'FLASK_ENV' == 'testing':
+            weather = WeatherInfo.get()
+            data = {"Free Park Slot": parking_slot, "Weather": weather}
+        else:
+            data = {"Free Park Slot": parking_slot}
         custom_logger(
             "error", f"{ForUsersParkingInfo.get.__qualname__} result is: {data}"
         )

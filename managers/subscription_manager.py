@@ -7,7 +7,7 @@ from constants import TEMP_FILE_FOLDER
 from db import db
 from helpers.decode_document import decode_file
 from models.subscription import SubscriptionModel
-from services.cloudinary_upload import upload_picture_to_cloudinary
+from services.cloudinary_upload import Cloudinary
 
 
 def validate_data(data):
@@ -33,7 +33,7 @@ class SubscribeManager:
             path = os.path.join(TEMP_FILE_FOLDER, f"{name}")
             try:
                 decode_file(path, data["photo_url"])
-                photo_path = upload_picture_to_cloudinary(path)
+                photo_path = Cloudinary(path).upload_picture_to_cloudinary()
                 if photo_path:
                     data["photo_url"] = photo_path
             except Exception:

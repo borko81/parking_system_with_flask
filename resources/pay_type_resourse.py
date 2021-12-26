@@ -19,7 +19,7 @@ class PayTypeResourse(Resource):
     @validate_schema(PayTypeRequest)
     def post(self):
         data = request.get_json()
-        return PayTypeManager.insert_new(data)
+        return PayTypeManager.insert_new(data), 201
 
 
 class PayTypeIdResourse(Resource):

@@ -133,7 +133,7 @@ class SubscribeFromIdRes(Resource):
           404:
             description: Not found
         """
-        return SubsribeConcretManager.delete_sub(_id)
+        return SubsribeConcretManager.delete_sub(_id), 204
 
 
 class SubscriptionFromType(Resource):

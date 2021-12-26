@@ -27,6 +27,7 @@ class ProductionConfig:
     )
 
 class TestingConfig:
+    FLASK_ENV = "testing"
     DEBUG = True
     TESTING = True
     SQLALCHEMY_DATABASE_URI = (

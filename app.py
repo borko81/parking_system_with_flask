@@ -1,17 +1,14 @@
 import json
 
 from flasgger import Swagger
-from flask import Flask
 from flask_migrate import Migrate
 from flask_restful import Api
 from sqlalchemy import exc
 from werkzeug.exceptions import BadRequest
 
+from config import create_app
 from db import db
 from helpers.loger_config import custom_logger
-from resources.routers import routers
-from config import create_app
-
 
 app = create_app()
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -49,12 +46,15 @@ def close_request(response):
 @app.errorhandler(exc.SQLAlchemyError)
 def handle_db_exceptions(error):
     db.session.rollback()
-    custom_logger("error", error)
-    raise BadRequest(error)
+    custom_logger("error", str(error))
+    raise BadRequest(
+        "An error acquire when try to manipulate date to DB, view log for detail."
+    )
 
 
 @app.route("/test_is_alive")
 def test_is_alive():
+    print(app.config)
     return {"message": "Server still alive"}
 
 

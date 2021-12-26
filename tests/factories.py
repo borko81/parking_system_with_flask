@@ -1,8 +1,9 @@
 import factory
 
 from db import db
-from models import UserModel
+from models import UserModel, TariffTypeModel
 from models.enum import UserType
+from models.subscription import SubscriptionModel
 
 
 class BaseFactory(factory.Factory):
@@ -29,6 +30,16 @@ class StaffUserFactory(BaseFactory):
         model = UserModel
 
     id = factory.Sequence(lambda n: n)
-    name = "Staff1 Staff Staff"
+    name = "Staff2 Staff Staff"
     password = "A123"
     type = UserType.staff
+
+
+class SubscribeFactory(BaseFactory):
+    class Meta:
+        model = SubscriptionModel
+
+    id = factory.Sequence(lambda n: n + 1)
+    card = "A111"
+    email = "A111@abv.bg"
+    tar_type_id = 1

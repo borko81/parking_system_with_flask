@@ -10,3 +10,4 @@ class SubscribeResquestSchema(BaseSubscribeRequestSchema):
 class SubscribeForEditSchema(BaseSubscribeRequestSchema):
     card = fields.String(validate=validate.Length(max=20), required=False)
     tar_type_id = fields.Integer(required=False)
+    email = fields.Email(required=True)
