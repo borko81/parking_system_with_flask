@@ -19,7 +19,7 @@ class AdminUserFactory(BaseFactory):
     class Meta:
         model = UserModel
 
-    id = factory.Sequence(lambda n: n)
+    id = factory.Sequence(lambda n: n + 1)
     name = "Admin Admin Admin"
     password = "A123"
     type = UserType.admin
@@ -29,8 +29,8 @@ class StaffUserFactory(BaseFactory):
     class Meta:
         model = UserModel
 
-    id = factory.Sequence(lambda n: n)
-    name = "Staff2 Staff Staff"
+    id = factory.Sequence(lambda n: n + 1)
+    name = "Staff Staff Staff"
     password = "A123"
     type = UserType.staff
 

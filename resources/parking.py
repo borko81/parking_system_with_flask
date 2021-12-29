@@ -113,7 +113,7 @@ class ParkingDetailInfoRes(Resource):
         """
         data = request.get_json()
         result = ParkingDetailFromIdManager.edit_car_in_park(_id, data)
-        return self.return_result_in_json_use_schema(result)
+        return self.return_result_in_json_use_schema(result), 200
 
     @auth.login_required
     def delete(self, _id):

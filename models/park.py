@@ -1,5 +1,4 @@
 from decouple import config
-from datetime import datetime
 from sqlalchemy.sql import func
 
 from db import db
