@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from werkzeug.exceptions import BadRequest
 
 from db import db
+from helpers.loger_config import custom_logger
 from managers.parking_detail_id_manager import ParkingDetailFromIdManager
 from models.payment_transaction import Transaction
 from services.wise import pay_with_wise
@@ -19,8 +20,16 @@ def validate_already_payed_raise_error_else_return_what_needed(check_id):
     """Tracert park and check needed id is already is payed, if true not continue"""
     result = ParkingDetailFromIdManager.get_from_id(check_id)
     if result.first().pay:
+        custom_logger(
+            "error",
+            f"Try to pay already payed card with id {check_id}",
+        )
         raise BadRequest("This bill already is payed")
     if not result.first().price:
+        custom_logger(
+            "error",
+            f"Try to pay card with id {check_id}, this card not have bill to pay",
+        )
         raise BadRequest("This card not have bill yet")
     result = ParkingDetailFromIdManager.get_from_id(check_id)
     price = result.first().price

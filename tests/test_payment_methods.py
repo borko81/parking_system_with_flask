@@ -1,5 +1,3 @@
-import json
-
 from flask_testing import TestCase
 
 from config import create_app

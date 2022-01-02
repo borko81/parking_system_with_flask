@@ -26,6 +26,7 @@ class ProductionConfig:
         f"@localhost:{config('DB_PORT')}/{config('DB_NAME')}"
     )
 
+
 class TestingConfig:
     FLASK_ENV = "testing"
     DEBUG = True
@@ -35,7 +36,8 @@ class TestingConfig:
         f"@localhost:{config('DB_PORT')}/{config('DB_TEST_NAME')}"
     )
 
-def create_app(config='config.DevelopmentConfig'):
+
+def create_app(config="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config)
 

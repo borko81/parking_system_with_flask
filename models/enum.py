@@ -1,5 +1,5 @@
 """
-Use return self.value, because it Enum class, think it is more good, then import third party import
+Use return self.value, because in Enum class, think it is more good, then import third party module
 """
 
 from enum import Enum

@@ -8,53 +8,14 @@ from db import db
 from managers.park_capacity_manager import ParkCapacityManager
 from managers.park_manager import ParkingManager
 from models import (
-    TariffTypeModel,
-    TarifPiceModel,
     SubscriptionModel,
-    ParkingCapacityModel,
     ParkModel,
 )
 from tests.base import generate_token
 from tests.factories import AdminUserFactory
+from tests.helpers_for_tests import GenerateTarifeData
 
 income = datetime.datetime.now()
-
-
-class GenerateTarifeData:
-    """
-    Generate all needed data for test
-    """
-
-    @staticmethod
-    def generate_tarif_id():
-        t = TariffTypeModel(name="common")
-        db.session.add(t)
-        db.session.commit()
-
-    @staticmethod
-    def generate_tarif_price():
-        t = TarifPiceModel(tarif_id=1, stay="00:01", price=1)
-        db.session.add(t)
-        db.session.commit()
-
-    @staticmethod
-    def generate_subscriber():
-        s = SubscriptionModel(card="A123", email="123@abv.bg", tar_type_id=1)
-        db.session.add(s)
-        db.session.commit()
-
-    @staticmethod
-    def generate_slot():
-        s = ParkingCapacityModel(capacity=2)
-        db.session.add(s)
-        db.session.commit()
-
-    @staticmethod
-    def generate_all_needed_data():
-        GenerateTarifeData.generate_slot()
-        GenerateTarifeData.generate_tarif_id()
-        GenerateTarifeData.generate_tarif_price()
-        GenerateTarifeData.generate_subscriber()
 
 
 # @freeze_time("2012-12-28 15:19:00.00")
@@ -81,7 +42,7 @@ class TestParkingSystem(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_insert_new_card_after_that_insert_same_card_daa_must_beupdated_free_slot_must_be_decrese_and_increase(
+    def test_insert_new_card_after_that_insert_same_card_again_must_be_updated_free_slot_must_be_decrese_and_increase(
         self,
     ):
         """
@@ -216,13 +177,13 @@ class TestParkingSystem(TestCase):
             headers=self.headers, path=self.path, data=json.dumps(data)
         )
         assert len(ParkModel.query.all()) == 1
-        response = self.client.delete(
-            headers=self.headers, path=path_to_test_delete
-        )
+        response = self.client.delete(headers=self.headers, path=path_to_test_delete)
         assert len(ParkModel.query.all()) == 0
         assert response.json == 204
 
-    def test_delete_card_from_parking_when_card_already_been_payed_should_raise_error(self):
+    def test_delete_card_from_parking_when_card_already_been_payed_should_raise_error(
+        self,
+    ):
         GenerateTarifeData.generate_all_needed_data()
         data = {"card": "A123"}
         path_to_test_delete = "/parking/detail/1"
@@ -232,8 +193,6 @@ class TestParkingSystem(TestCase):
         card_update = ParkModel.query.filter_by(id=1).first()
         card_update.pay = True
         assert len(ParkModel.query.all()) == 1
-        response = self.client.delete(
-            headers=self.headers, path=path_to_test_delete
-        )
+        response = self.client.delete(headers=self.headers, path=path_to_test_delete)
         assert len(ParkModel.query.all()) == 1
         assert response.json["message"] == "Card is already payed, not allow editing!"

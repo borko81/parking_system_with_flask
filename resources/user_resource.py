@@ -55,9 +55,8 @@ class UserLoginRes(Resource):
     def post(self):
         """
         Login system
-        usage: curl 127.0.0.1:5000/login -X POST -H "Content-Type:application/json" -d \
-        '{"password":"A123", "name":"Name G Name"}'
-        :return: json data
+        usage: {"name": "A A A", "password": "123A"}
+        return: json data with token
         ---
         tags:
         - users login

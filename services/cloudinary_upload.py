@@ -4,7 +4,6 @@ from decouple import config
 
 
 class Cloudinary:
-
     def __init__(self, picture):
         self.picture = picture
 

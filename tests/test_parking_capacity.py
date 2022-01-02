@@ -66,7 +66,7 @@ class TestCapacity(TestCase):
 
         response = self.client.get(url_with_free_park_slot)
         assert response.status_code == 200
-        assert response.json['Free Park Slot'] == 100
+        assert response.json["Free Park Slot"] == 100
 
     def test_delete_capacity_when_have_already_row(self):
         headers = {

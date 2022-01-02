@@ -35,6 +35,10 @@ class PayTypeIDManager:
     def get(_id):
         data = PayType.query.filter_by(id=_id)
         if not data.first():
+            custom_logger(
+                "error",
+                f"Function get from PayTypeIDManager: try to get paytype with invalid id: {_id}",
+            )
             raise NotFound("Not found id: {}".format(_id))
         return data
 

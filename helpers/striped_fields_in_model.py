@@ -4,6 +4,11 @@ from db import db
 
 
 class StrippedString(TypeDecorator):
+    """
+    Use to check unique name is stay uniq
+    even in lowercase and uppercase letters insert.
+    """
+
     impl = db.String
     cache_ok = True
 

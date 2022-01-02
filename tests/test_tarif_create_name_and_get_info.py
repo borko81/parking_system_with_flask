@@ -142,7 +142,6 @@ class TestTarife(TestCase):
         )
         assert response.status_code == 404
 
-
     def test_create_new_tarife_with_name_not_recognize_in_enum_should_raise_BadRequest(
         self,
     ):

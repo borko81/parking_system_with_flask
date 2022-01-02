@@ -6,6 +6,7 @@ from werkzeug.exceptions import BadRequest, NotFound
 from constants import TEMP_FILE_FOLDER
 from db import db
 from helpers.decode_document import decode_file
+from helpers.loger_config import custom_logger
 from models.subscription import SubscriptionModel
 from services.cloudinary_upload import Cloudinary
 
@@ -59,6 +60,10 @@ class SubsribeConcretManager:
         sub = SubscriptionModel.query.filter_by(id=_id)
         if sub.first():
             return sub
+        custom_logger(
+            "error",
+            f"Function get_sub: try to get user with invalid id: {_id}",
+        )
         raise NotFound("Invalid id {}".format(_id))
 
     @staticmethod

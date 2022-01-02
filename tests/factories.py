@@ -1,7 +1,7 @@
 import factory
 
 from db import db
-from models import UserModel, TariffTypeModel
+from models import UserModel
 from models.enum import UserType
 from models.subscription import SubscriptionModel
 
@@ -19,7 +19,7 @@ class AdminUserFactory(BaseFactory):
     class Meta:
         model = UserModel
 
-    id = factory.Sequence(lambda n: n + 1)
+    id = factory.Sequence(lambda n: n)
     name = "Admin Admin Admin"
     password = "A123"
     type = UserType.admin
@@ -29,7 +29,7 @@ class StaffUserFactory(BaseFactory):
     class Meta:
         model = UserModel
 
-    id = factory.Sequence(lambda n: n + 1)
+    id = factory.Sequence(lambda n: n)
     name = "Staff Staff Staff"
     password = "A123"
     type = UserType.staff

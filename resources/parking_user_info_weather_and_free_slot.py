@@ -19,7 +19,7 @@ class ForUsersParkingInfo(Resource):
         """
         parking_slot = ParkingCapacityRes.get()
         # Paused to check flask wun in testing mod if not true, load weather info
-        if not 'FLASK_ENV' == 'testing':
+        if not "FLASK_ENV" == "testing":
             weather = WeatherInfo.get()
             data = {"Free Park Slot": parking_slot, "Weather": weather}
         else:

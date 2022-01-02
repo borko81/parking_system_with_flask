@@ -27,7 +27,7 @@ class UserRegisterManager(Resource):
             return schema.dump(user)
         custom_logger(
             "error",
-            f"Function insert_new_name: Try to tegister with not unique name ({data['name']})",
+            f"Function insert_new_name: Try to register with not unique name ({data['name']})",
         )
         raise BadRequest("Invalid data, try again")
 
