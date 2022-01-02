@@ -1,1 +1,1 @@
-export DATABASE_URL='postgres://rcicpassleifnf:8a1985ba34eb598459a0d2bf39bef1ad35be401175ca7e9dff53e86cbd477fd7@ec2-63-32-7-190.eu-west-1.compute.amazonaws.com:5432/demp4j96vm74a2'
+export DATABASE_URL='postgresql://rcicpassleifnf:8a1985ba34eb598459a0d2bf39bef1ad35be401175ca7e9dff53e86cbd477fd7@ec2-63-32-7-190.eu-west-1.compute.amazonaws.com:5432/demp4j96vm74a2'
