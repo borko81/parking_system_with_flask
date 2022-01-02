@@ -80,8 +80,6 @@ target/
 # IPython
 profile_default/
 ipython_config.py
-temp_files/*
-temp_files
 
 # pyenv
 .python-version
