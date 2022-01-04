@@ -1,5 +1,6 @@
-from db import db
 from decouple import config
+
+from db import db
 
 
 class TarifPiceModel(db.Model):

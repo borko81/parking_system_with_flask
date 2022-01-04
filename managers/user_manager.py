@@ -11,7 +11,6 @@ from models.users import UserModel
 from schemas.request.user_request_schema import UserRegisterSchema
 from schemas.response.user_response_schema import UserResponceSchema
 from services.amazon_ses_services import SeSEmail
-import json
 
 
 class UserRegisterManager(Resource):

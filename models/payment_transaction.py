@@ -1,5 +1,6 @@
-from db import db
 from sqlalchemy.sql import func
+
+from db import db
 
 
 class Transaction(db.Model):
